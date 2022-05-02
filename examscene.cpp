@@ -9,6 +9,7 @@
 #include "obj.h"
 #include "npc.h"
 #include "route.h"
+#include "skybox.h"
 
 ExamScene::ExamScene(std::vector<Scene*> scenes, ShaderHandler* handler, RenderWindow& renderWindow, float size) : Scene(scenes, handler, renderWindow, size)
 {
@@ -30,6 +31,11 @@ void ExamScene::createObjects()
 {
 	VisualObject* temp;
 
+	mObjects.push_back(temp = new OBJ(*this, mShaderHandler->mShaderProgram[2], "../3Dprog22/Assets/models/avokado.obj", "../3Dprog22/Assets/models/avokado.bmp"));
+	temp->setName("avokado");
+
+	mObjects.push_back(temp = new OBJ(*this, mShaderHandler->mShaderProgram[2], "../3Dprog22/Assets/models/container.obj", "../3Dprog22/Assets/models/container.bmp"));
+	temp->setName("car");
 
 	// Oppgave 2 - Heightmap
 	mObjects.push_back(temp = new HeightMap(*this, mShaderHandler->mShaderProgram[2], new Texture("../3Dprog22/Assets/heightmap.bmp"),1,0.06f,0.5f,-10.f));
@@ -47,11 +53,16 @@ void ExamScene::createObjects()
 	// Oppgave 4 - Spiller
 	mObjects.push_back(temp = new InteractiveObject(*this, mShaderHandler->mShaderProgram[2], new OBJ(*this, mShaderHandler->mShaderProgram[2], "../3Dprog22/Assets/character/character_model.obj", "../3Dprog22/Assets/character/character_texture.bmp")));
 	temp->setName("player");
-	temp->calculateNormals();
+//	temp->calculateNormals();
 
+	// Oppgave 7 - Enemy
 	mObjects.push_back(temp = new NPC(*this, mShaderHandler->mShaderProgram[0], mRoutes["route1"],.1f, 1.f, true, true));
 	temp->setName("NPC1");
 	temp->move(0.f, 0.f, 5.f);
+
+	mObjects.push_back(temp = new SkyBox(*this, mShaderHandler->mShaderProgram[3]));
+	temp->setName("skybox");
+	temp->move(5.f, 5.f, 20.f);
 
 	for (auto it = mObjects.begin(); it != mObjects.end(); it++)
 		mMap.insert(std::pair<std::string, VisualObject*>((*it)->getName(), *it));
@@ -108,7 +119,7 @@ void ExamScene::renderCamera()
 	mCamera->perspective(60, mRenderWindow.width() / mRenderWindow.height(), 0.1, 100.0); // verticalAngle, aspectRatio, nearPlane,farPlane
 
 	QVector3D playerPos{getPlayer()->getXYZ('x'),getPlayer()->getXYZ('y'),getPlayer()->getXYZ('z')};
-	QVector3D camOff{ 0.f,-15.f,10.f }; // The offset of the camera from the player
+	QVector3D camOff{ 0.f,-15.f,6.f }; // The offset of the camera from the player
 	QVector3D camPos{ playerPos.x() + camOff.x(),playerPos.y() + camOff.y(),playerPos.z() + camOff.z() };
 	mCamera->lookAt(camPos,playerPos, mCamera->mUp);
 
