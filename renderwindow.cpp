@@ -607,3 +607,17 @@ void RenderWindow::debugCameraToggle()
         mCamera->bFreeCamera = false;
     }
 }
+
+void RenderWindow::debugModeToggle()
+{
+    if (bDebugMode == false)
+    {
+        debugCameraToggle();
+        bDebugMode = true;
+    }
+    else
+    {
+        debugCameraToggle();
+        bDebugMode = false;
+    }
+}

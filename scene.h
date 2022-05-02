@@ -15,6 +15,7 @@ class VisualObject;
 class InteractiveObject;
 class Camera;
 class ShaderHandler;
+class XYZ;
 class Scene : public QWindow, protected QOpenGLFunctions_4_1_Core
 {
 public:
@@ -64,6 +65,7 @@ public:
 
 protected:
     ShaderHandler* mShaderHandler{ nullptr };
+    XYZ* axis{ nullptr };
 };
 
 #endif // SCENE_H

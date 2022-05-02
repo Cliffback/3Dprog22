@@ -22,6 +22,8 @@ Scene::Scene(std::vector<Scene*> scenes, ShaderHandler* handler, RenderWindow& r
 	, mapSize{size}
 {
     initializeOpenGLFunctions();
+    axis = new XYZ(*this, mShaderHandler->mShaderProgram[0]);
+    axis->init();
 
     //createObjects();
     //initQuadTre();
@@ -113,6 +115,8 @@ void Scene::draw()
     drawQuads();
 
     collisionCheck();
+    if (mRenderWindow.bDebugMode)
+        axis->draw();
 
 }
 

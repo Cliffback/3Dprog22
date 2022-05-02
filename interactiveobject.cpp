@@ -168,6 +168,7 @@ void InteractiveObject::keyInput(bool key[5], float speed)
     if (key[2]) // S
         moveY = -speed;
 
+
     if (key[3]) // D
         moveX = speed;
 

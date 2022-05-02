@@ -40,6 +40,8 @@ public:
 
         ///Helper function that uses QOpenGLDebugLogger or plain glGetError()
     void checkForGLerrors();
+    bool bDebugMode{ false };
+    void debugModeToggle();
 
     void drawAABB(glm::vec3 position, glm::vec3 extent);
     bool bDrawCollision{ false };
@@ -116,6 +118,7 @@ protected:
     void wireframeToggle();
     void cullToggle();
     void debugCameraToggle();
+
 
 };
 

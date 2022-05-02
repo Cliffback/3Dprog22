@@ -92,12 +92,12 @@ void MainWindow::on_DebugMode_toggled(bool checked)
 {
     if (checked)
     {
-        //mRenderWindow->mRotate = true;
+        mRenderWindow->debugModeToggle();
         ui->DebugMode->setText("Debug Mode");
     }
     else
     {
-        //mRenderWindow->mRotate = false;
+        mRenderWindow->debugModeToggle();
         ui->DebugMode->setText("Game Mode");
     }
 }
