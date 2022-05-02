@@ -224,10 +224,6 @@ void RenderWindow::render()
     glUseProgram(mShaderHandler->mShaderProgram[0]->getProgram() );
 
 
-    // Gammel kode før mMap
-    /*for (auto it=mObjects.begin(); it!=mObjects.end(); it++)
-        (*it)->draw();
-	*/
 
     for (auto it = mScenes.begin(); it != mScenes.end(); it++)
         if ((*it)->checkActivated())
@@ -240,26 +236,14 @@ void RenderWindow::render()
     player = activeScene->getPlayer();
     mCamera = activeScene->getCamera();
 
+    if (bDrawCamera)
+        mCamera->drawCamera();
+
     activeScene->draw();
+
 
     glUseProgram(0); // Makes a NVIDIA shader warning go away
 
-    //mCamera = mScenes[sceneNumber]->getCamera();
-    //mCamera->init(mPmatrixUniform, mVmatrixUniform);
-    //mCamera->perspective(60, static_cast<GLint>(width()) / static_cast<GLint>(height()), 0.1, 100.0); // verticalAngle, aspectRatio, nearPlane,farPlane
-
-    //mScenes[sceneNumber]->renderCamera();
-
-
-    //mCamera.lookAt(QVector3D{0,0,20}, QVector3D{0,0,0}, QVector3D{0,1,0});
-    //mCamera->translate(player->getPosition2D().first * -1, player->getPosition2D().second * -1, -10.f);
-    
-
-
-    //mScenes[0]->draw();
-
-    //for (auto it = mQuadTre.begin(); it != mQuadTre.end(); it++)
-    //    (*it)->draw();
 
     //Calculate framerate before
     // checkForGLerrors() because that call takes a long time
@@ -507,21 +491,10 @@ void RenderWindow::keyPressEvent(QKeyEvent *event)
             debugCameraToggle();
 
         if (event->key() == Qt::Key_B)
-        {
-            if (!bDrawCollision)
-                bDrawCollision = true;
-            else
-                bDrawCollision = false;
-        }
-        
+            drawCollisionToggle();
 
         if (event->key() == Qt::Key_R)
-        {
-	        if (!activeScene->bDrawQuads)
-                activeScene->bDrawQuads = true;
-            else
-                activeScene->bDrawQuads = false;
-        }
+            drawQuadsToggle();
 
         if (event->key() == Qt::Key_1)
         {
@@ -608,16 +581,39 @@ void RenderWindow::debugCameraToggle()
     }
 }
 
+void RenderWindow::drawCollisionToggle()
+{
+    if (!bDrawCollision)
+        bDrawCollision = true;
+    else
+        bDrawCollision = false;
+}
+
+void RenderWindow::drawQuadsToggle()
+{
+    if (!activeScene->bDrawQuads)
+        activeScene->bDrawQuads = true;
+    else
+        activeScene->bDrawQuads = false;
+}
+
+// Oppgave 6
 void RenderWindow::debugModeToggle()
 {
     if (bDebugMode == false)
     {
+        drawCollisionToggle();
         debugCameraToggle();
+        drawQuadsToggle();
+        bDrawCamera = true;
         bDebugMode = true;
     }
     else
     {
+        drawCollisionToggle();
         debugCameraToggle();
+        drawQuadsToggle();
+        bDrawCamera = false;
         bDebugMode = false;
     }
 }

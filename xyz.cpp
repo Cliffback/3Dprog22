@@ -2,14 +2,26 @@
 
 XYZ::XYZ(Scene& scene, Shader* shaderProgram) : VisualObject(scene, shaderProgram)
 {
-   mVertices.push_back(Vertex{0,0,0,1,0,0});
-   mVertices.push_back(Vertex{1,0,0,1,0,0});
-   mVertices.push_back(Vertex{0,0,0,0,1,0});
-   mVertices.push_back(Vertex{0,1,0,0,1,0});
-   mVertices.push_back(Vertex{0,0,0,0,0,1});
-   mVertices.push_back(Vertex{0,0,1,0,0,1});
-   mMatrix.setToIdentity();
-   mMatrix.scale(10.f);
+
+
+	// Version that only draws from origo 
+	//mVertices.push_back(Vertex{0,0,0,1,0,0});
+	//mVertices.push_back(Vertex{1,0,0,1,0,0});
+	//mVertices.push_back(Vertex{0,0,0,0,1,0});
+	//mVertices.push_back(Vertex{0,1,0,0,1,0});
+	//mVertices.push_back(Vertex{0,0,0,0,0,1});
+	//mVertices.push_back(Vertex{0,0,1,0,0,1});
+
+	//// Version that only draws from origo 
+	mVertices.push_back(Vertex{ -1, 0, 0,1,0,0 });
+	mVertices.push_back(Vertex{  1, 0, 0,1,0,0 });
+	mVertices.push_back(Vertex{  0,-1, 0,0,1,0 });
+	mVertices.push_back(Vertex{  0, 1, 0,0,1,0 });
+	mVertices.push_back(Vertex{  0, 0,-1,0,0,1 });
+	mVertices.push_back(Vertex{  0, 0, 1,0,0,1 });
+
+	mMatrix.setToIdentity();
+   mMatrix.scale(100.f);
    bShape = new AABB();
 
 }

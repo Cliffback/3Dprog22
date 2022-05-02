@@ -20,7 +20,7 @@ public:
     void draw() override;
     void changeRoute(std::vector<Vertex> points, float a, float b, float c, float min, float max);
 
-    float xMin {0.f}, xMax{20.f};
+    float xMin {0.f}, xMax{40.f};
     class VisualPoint* myPoints;
     float ma{ 0.f }, mb{ 0.f }, mc{ 0.f }, md{ 0.f };
 

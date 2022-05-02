@@ -118,6 +118,10 @@ protected:
     void wireframeToggle();
     void cullToggle();
     void debugCameraToggle();
+    void drawCollisionToggle();
+    void drawQuadsToggle();
+
+    bool bDrawCamera{ false };
 
 
 };

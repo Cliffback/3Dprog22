@@ -7,11 +7,16 @@
 #include "light.h"
 #include "octahedronball.h"
 #include "obj.h"
+#include "npc.h"
+#include "route.h"
 
 ExamScene::ExamScene(std::vector<Scene*> scenes, ShaderHandler* handler, RenderWindow& renderWindow, float size) : Scene(scenes, handler, renderWindow, size)
 {
-	mCamera = new Camera(this);
+	//mCamera = new Camera(this);
+	mCamera = new Camera(this, new OBJ(*this, mShaderHandler->mShaderProgram[2], "../3Dprog22/Assets/models/camera_model.obj", "../3Dprog22/Assets/models/camera_texture.bmp"));
+
 	quadDrawHeight = 0.7f;
+	createRoutes();
 	createObjects();
 	initQuadTre();
 
@@ -27,7 +32,7 @@ void ExamScene::createObjects()
 
 
 	// Oppgave 2 - Heightmap
-	mObjects.push_back(temp = new HeightMap(*this, mShaderHandler->mShaderProgram[2], new Texture("../3Dprog22/Assets/heightmap.bmp"),1,0.06f,0.5f,-30.f));
+	mObjects.push_back(temp = new HeightMap(*this, mShaderHandler->mShaderProgram[2], new Texture("../3Dprog22/Assets/heightmap.bmp"),1,0.06f,0.5f,-10.f));
 	temp->setName("heightmap");
 	temp->loadTexture(new Texture("../3Dprog22/Assets/grass.bmp"));
 	mapSize = dynamic_cast<HeightMap*>(temp)->getSize() / 2;
@@ -44,10 +49,35 @@ void ExamScene::createObjects()
 	temp->setName("player");
 	temp->calculateNormals();
 
+	mObjects.push_back(temp = new NPC(*this, mShaderHandler->mShaderProgram[0], mRoutes["route1"],.1f, 1.f, true, true));
+	temp->setName("NPC1");
+	temp->move(0.f, 0.f, 5.f);
+
 	for (auto it = mObjects.begin(); it != mObjects.end(); it++)
 		mMap.insert(std::pair<std::string, VisualObject*>((*it)->getName(), *it));
 
 	dynamic_cast<InteractiveObject*>(mMap["player"])->setHeightmap(static_cast<HeightMap*>(mMap["heightmap"]));
+}
+
+void ExamScene::createRoutes()
+{
+	std::vector<Vertex> route1Points;
+	route1Points.push_back(Vertex{ 1.f,2.f,0.f, 0,1,0 });
+	route1Points.push_back(Vertex{ 3.f,5.f,0.f, 0,1,0 });
+	route1Points.push_back(Vertex{ 4.f,3.f,0.f, 0,1,0 });
+	route1Points.push_back(Vertex{ 6.f,6.f,0.f, 0,1,0 });
+	route1Points.push_back(Vertex{ 8.f,2.f,0.f, 0,1,0 });
+	route1Points.push_back(Vertex{ 9.f,5.f,0.f, 0,1,0 });
+	route1Points.push_back(Vertex{ 10.f,4.f,0.f, 0,1,0 });
+	mRoutes.insert(std::pair<std::string, Route*>{"route1", new Route{ *this, mShaderHandler->mShaderProgram[0], route1Points, -0.072f,0.92628f,1.59003f, -20.f, 35.f }});
+
+	std::vector<Vertex> route2Points;
+	route2Points.push_back(Vertex{ 1.f,3.f,0.f, 1,0,0 });
+	route2Points.push_back(Vertex{ 3.f,5.f,0.f, 1,0,0 });
+	route2Points.push_back(Vertex{ 4.f,2.f,0.f, 1,0,0 });
+	route2Points.push_back(Vertex{ 6.f,6.f,0.f, 1,0,0 });
+	mRoutes.insert(std::pair<std::string, Route*>{"route2", new Route{ *this, mShaderHandler->mShaderProgram[0], 0.59999f,-6.13333f,17.73332f, -9.2f, 1.0f, 6.0f }});
+
 }
 
 void ExamScene::init()
@@ -76,7 +106,11 @@ void ExamScene::renderObjects()
 void ExamScene::renderCamera()
 {
 	mCamera->perspective(60, mRenderWindow.width() / mRenderWindow.height(), 0.1, 100.0); // verticalAngle, aspectRatio, nearPlane,farPlane
-	mCamera->lookAt(QVector3D{ getPlayer()->getPosition2D().first,getPlayer()->getPosition2D().second - 10.f,20 }, QVector3D{ getPlayer()->getPosition2D().first,getPlayer()->getPosition2D().second,0 }, QVector3D{ 0,1,0 });
+
+	QVector3D playerPos{getPlayer()->getXYZ('x'),getPlayer()->getXYZ('y'),getPlayer()->getXYZ('z')};
+	QVector3D camOff{ 0.f,-15.f,10.f }; // The offset of the camera from the player
+	QVector3D camPos{ playerPos.x() + camOff.x(),playerPos.y() + camOff.y(),playerPos.z() + camOff.z() };
+	mCamera->lookAt(camPos,playerPos, mCamera->mUp);
 
 }
 

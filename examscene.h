@@ -1,5 +1,6 @@
 #pragma once
 #include "scene.h"
+class Route;
 class ExamScene :
     public Scene
 {
@@ -10,8 +11,10 @@ public:
 	void renderObjects() override;
 	void renderCamera() override;
 	void createObjects() override;
+	void createRoutes();
+
 private:
-	//Light* mLight{ nullptr };
+	std::unordered_map<std::string, Route*> mRoutes;
 	bool mMove{ true };     //Check if triangle should move
 };
 

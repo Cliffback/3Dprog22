@@ -22,6 +22,8 @@ Scene::Scene(std::vector<Scene*> scenes, ShaderHandler* handler, RenderWindow& r
 	, mapSize{size}
 {
     initializeOpenGLFunctions();
+
+	// Oppgave 6
     axis = new XYZ(*this, mShaderHandler->mShaderProgram[0]);
     axis->init();
 

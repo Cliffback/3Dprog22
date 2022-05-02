@@ -9,10 +9,15 @@ class NPC : public VisualObject
 {
 public:
     NPC(Scene& scene, Shader* shaderProgram);
+    NPC(Scene& scene, Shader* shaderProgram, Route* route, float speed, float radius, bool visiblePath, bool visibleObject);
+
+
     NPC(Scene& scene, Shader* shaderProgram, TriangleSurface* surface, float speed, float radius, bool visiblePath, bool visibleObject);
     NPC(Scene& scene, Shader* shaderProgram, TriangleSurface* surface, Route* route, float speed, float radius, bool visiblePath, bool visibleObject);
+
     ~NPC() override;
     void construct(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax);
+    void move(float x, float y, float z) override;
     void move(float dt) override;
     void changeRoute(float speed, Route* route, bool visiblePath, bool visibleObject);
     void init() override;

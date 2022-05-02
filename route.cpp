@@ -26,7 +26,7 @@ Route::Route(Scene& scene, Shader* shaderProgram, float a, float b, float c, flo
 
 Route::Route(Scene& scene, Shader* shaderProgram, std::vector<Vertex> points, float a, float b, float c, float min, float max) : VisualPoint(scene, shaderProgram), xMin{min}, xMax{max}, ma{a}, mb{b}, mc{c}
 {
-    renderPoints = true;
+    renderPoints = false;
 	for (int i = 0; i < points.size(); ++i)
 	{
 		mPoints.push_back(points[i]);
@@ -42,7 +42,7 @@ Route::Route(Scene& scene, Shader* shaderProgram, std::vector<Vertex> points, fl
 
 Route::Route(Scene& scene, Shader* shaderProgram, std::vector<Vertex> points, float a, float b, float c, float d, float min, float max) : VisualPoint(scene, shaderProgram), xMin{ min }, xMax{ max }, ma{ a }, mb{ b }, mc{ c }, md{ d }
 {
-    renderPoints = true;
+    //renderPoints = true;
 
     for (int i = 0; i < points.size(); ++i)
     {

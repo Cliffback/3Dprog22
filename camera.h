@@ -5,13 +5,19 @@
 #include <QVector3D>
 #include <QKeyEvent>
 #include <QMatrix4x4>
+
+#include "visualobject.h"
 #include "glm/glm.hpp"
 
 class Scene;
+class Shader;
+class VisualObject;
 class Camera : public QOpenGLFunctions_4_1_Core
 { 
 public:
     Camera(Scene* scene);
+    Camera(Scene* scene, VisualObject* model);
+
     ~Camera() { }
     void init(GLint pMatrixUniform, GLint vMatrixUniform);
     void perspective(int degrees, double aspect, double nearplane, double farplane);
@@ -19,6 +25,7 @@ public:
     void update();
     void translate(float dx, float dy, float dz);
 
+    void drawCamera();
     void keyInput(bool key[5], float speed);
     void keyPressEvent(QKeyEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
@@ -28,7 +35,7 @@ public:
     QMatrix4x4 mVmatrix{};         // og denne, skal legges inn i kameraklasse
 
 
-
+    VisualObject* mModel{nullptr};
 	Scene* mScene{nullptr};
 
     // new code
@@ -66,5 +73,6 @@ private:
     float mouseY{ 0.f };
 
 };
+
 
 #endif // CAMERA_H

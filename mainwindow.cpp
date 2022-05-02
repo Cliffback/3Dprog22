@@ -88,6 +88,7 @@ void MainWindow::on_fileExit_triggered()
     close();       //Shuts down the whole program
 }
 
+// Oppgave 6
 void MainWindow::on_DebugMode_toggled(bool checked)
 {
     if (checked)

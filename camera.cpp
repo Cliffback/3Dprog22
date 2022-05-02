@@ -1,14 +1,22 @@
 #include "camera.h"
 #include <iostream>
+
+#include "visualobject.h"
 #include "glm/glm.hpp"
 #include "glm/gtx/rotate_vector.hpp"
 #include "glm/gtx/vector_angle.hpp"
-
+#include "glm/gtx/vector_angle.hpp"
+#include "visualobject.h"
 
 Camera::Camera(Scene* scene) : mScene(scene), mEye{0,0,0}
 {
     mPmatrix.setToIdentity();
     mVmatrix.setToIdentity();
+}
+
+Camera::Camera(Scene* scene, VisualObject* model) : mScene(scene), mModel(model)
+{
+	mModel->init();
 }
 
 void Camera::init(GLint pMatrixUniform, GLint vMatrixUniform)
@@ -31,11 +39,27 @@ void Camera::lookAt(const QVector3D &eye, const QVector3D &at, const QVector3D &
 	{
         mPosition = eye;
         mVmatrix.lookAt(eye, at, up);
+		if (mModel)
+        {
+			mModel->move(mPosition.x(), mPosition.y(), mPosition.z());
+			mModel->mMatrix.rotate(180, QVector3D(0, 1, 0)); // Model was upside down
+
+			// Syntax from here: https://stackoverflow.com/questions/39281019/get-angle-between-two-3d-points
+			QVector3D angle(
+				glm::degrees(atan2(
+					sqrt(pow(eye.x() - at.x(), 2) + pow(eye.y() - at.y(), 2)), 
+					at.z() - eye.z())) - 90.0f, // the distance between the vectors should not include the Z position distance in it
+				glm::degrees(atan2(at.y() - eye.y(), at.x() - eye.x())
+				),
+				0.0f);
+
+			mModel->mMatrix.rotate(angle.x(), QVector3D(1, 0, 0));
+        }
 
 	}
 	else
 	{
-		keyInput(mKey, 0.01f);
+		keyInput(mKey, 0.1f);
         mVmatrix.lookAt(mPosition, mPosition + mForward, mUp);
 	}
     update();
@@ -53,11 +77,14 @@ void Camera::translate(float dx, float dy, float dz)
     mVmatrix.translate(dx,dy,dz);
 }
 
+void Camera::drawCamera()
+{
+	if (mModel)
+		mModel->draw();
+}
+
 void Camera::keyInput(bool key[5], float speed)
 {
-	std::cout << "helloo world" << std::endl;
-
-
 	if (key[6])
 		speed = speed * 2;
 

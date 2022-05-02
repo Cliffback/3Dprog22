@@ -7,6 +7,16 @@ NPC::NPC(Scene& scene, Shader* shaderProgram) : VisualObject(scene, shaderProgra
 
 }
 
+NPC::NPC(Scene& scene, Shader* shaderProgram, Route* route, float speed, float radius, bool visiblePath,
+	bool visibleObject) : VisualObject(scene, shaderProgram), mx{ 0.f }, my{ 0.f }, mz{ 0.f }, mSpeed{ speed }, myRoute{ route }, showPath(visiblePath), showObject(visibleObject)
+{
+
+    float xmin{ radius * -1 }, xmax{ xmin * -1 }, ymin{ xmin }, ymax{ xmin * -1 }, zmin{ xmin }, zmax{ zmin * -1 };
+    construct(xmin, xmax, ymin, ymax, zmin, zmax);
+    mMatrix.setToIdentity();
+    bShape = new AABB();
+}
+
 NPC::NPC(Scene& scene, Shader* shaderProgram, TriangleSurface* surface, float speed, float radius, bool visiblePath, bool visibleObject) : VisualObject(scene, shaderProgram), mx{ 0.f }, my{ 0.f }, mz{ 0.f }, mSpeed{ speed }, mySurface{ surface }, showPath(visiblePath), showObject(visibleObject)
 {
     zeroRoute = new Route(mScene, mShaderProgram);
@@ -93,6 +103,20 @@ void NPC::construct(float xmin, float xmax, float ymin, float ymax, float zmin, 
 
 }
 
+void NPC::move(float x, float y, float z)
+{
+    mx = x;
+    my = y;
+    mz = z;
+
+    if (myRoute)
+        myRoute->move(mx, my, mz);
+
+    QVector4D pos{ mx,my,mz,1.0f };
+    mPosition.setColumn(3, pos);
+    mMatrix = mPosition;
+}
+
 void NPC::move(float dt)
 {
 
@@ -126,7 +150,8 @@ void NPC::move(float dt)
 
     tempY = myRoute->mathFunction(mx + tempX) - my;
 
-    tempZ = mySurface->function(mx + tempX, my + tempY) - mz; // We get the z-difference since last frame from the surface
+    if (mySurface)
+        tempZ = mySurface->function(mx + tempX, my + tempY) - mz; // We get the z-difference since last frame from the surface
 
     mx += tempX;
     my += tempY;
@@ -153,8 +178,9 @@ void NPC::init()
 {
     VisualObject::init();
 
-    if (zeroRoute)
-        zeroRoute->init();
+    if (myRoute)
+        myRoute->init();
+
 }
 
 void NPC::draw()
