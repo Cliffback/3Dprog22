@@ -73,9 +73,7 @@ compile_commands.json
 .vs/*
 debug/*
 release/*
-*.vcxproj*
 *_resource.rc
-*.sln
 *.aps
 *.h.cpp
 
