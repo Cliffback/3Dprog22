@@ -8,7 +8,9 @@ class HeightMap : public VisualObject
 {
 public:
 	HeightMap(Scene& scene, Shader* shaderProgram);
-	void loadBitmap();
+	HeightMap(Scene& scene, Shader* shaderProgram, Texture* heightmap, unsigned detail, float heightMultiplier, float scale,
+		float offset);
+	void loadBitmap(Texture * heightmap);
 	void construct(unsigned int detail, float heightMultiplier, float scale, float offset);
 
 	float getHeight(glm::vec3 position);

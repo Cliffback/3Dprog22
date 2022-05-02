@@ -6,17 +6,27 @@
 
 HeightMap::HeightMap(Scene& scene, Shader* shaderProgram) : VisualObject(scene, shaderProgram)
 {
-    loadBitmap();
+
+    loadBitmap(new Texture("../3Dprog22/Assets/hund.bmp"));
     construct(1, 0.2f, 0.05f,-30.f);
     calcNormals();
     bShape = new AABB();
 
 }
 
-void HeightMap::loadBitmap()
+HeightMap::HeightMap(Scene& scene, Shader* shaderProgram, Texture* heightmap, unsigned detail, float heightMultiplier, float scale,
+    float offset) : VisualObject(scene, shaderProgram), mHeightMap{ heightmap }
 {
-    mHeightMap = new Texture("../3Dprog22/Assets/hund.bmp");
-    //mTexture = new Texture("../3Dprog22/Assets/grass.bmp");
+    loadBitmap(heightmap);
+    construct(detail, heightMultiplier, scale, offset);
+    calcNormals();
+    bShape = new AABB();
+}
+
+void HeightMap::loadBitmap(Texture* heightmap)
+{
+    mHeightMap = heightmap;
+
 
 	mWidth = mHeightMap->mColumns;
     mHeight = mHeightMap->mRows;

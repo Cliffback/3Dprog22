@@ -35,6 +35,7 @@
 #include "light.h"
 #include "camera.h"
 #include "glm/gtc/type_ptr.hpp"
+#include "examscene.h"
 
 RenderWindow::RenderWindow(const QSurfaceFormat &format, MainWindow *mainWindow)
     : mContext(nullptr), mInitialized(false), mMainWindow(mainWindow)
@@ -132,15 +133,19 @@ void RenderWindow::init()
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    // Previous Scenes
     mScenes.push_back(new Scene1(mScenes, mShaderHandler, *this, 20.f));
     mScenes.push_back(new Scene2(mScenes, mShaderHandler, *this, 15.f));
     mScenes.push_back(new Scene3(mScenes, mShaderHandler, *this));
 
 
+    // Exam: Oppgave 1
+    mScenes.push_back(new ExamScene(mScenes, mShaderHandler, *this));
+
     for (auto it = mScenes.begin(); it != mScenes.end(); it++)
         (*it)->updateScenes(mScenes);
 
-    activeScene = mScenes[0];
+    activeScene = mScenes[3];
     activeScene->activateScene();
 
     player = activeScene->getPlayer();

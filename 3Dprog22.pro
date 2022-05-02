@@ -15,6 +15,7 @@ SOURCES += main.cpp \
     door.cpp \
     door1.cpp \
     door2.cpp \
+    examscene.cpp \
     heightmap.cpp\
     house.cpp \
     interactiveobject.cpp \
@@ -55,6 +56,7 @@ HEADERS += \
     door.h \
     door1.h \
     door2.h \
+    examscene.h \
     heightmap.h\
     house.h \
     interactiveobject.h \
