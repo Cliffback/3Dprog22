@@ -1,0 +1,1 @@
+Model from: https://sketchfab.com/3d-models/low-poly-character-rigged-b2ca55ab706c4b1ba1c6475d8b3c5bfd

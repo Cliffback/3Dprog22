@@ -6,6 +6,7 @@
 #include "renderwindow.h"
 #include "light.h"
 #include "octahedronball.h"
+#include "obj.h"
 
 ExamScene::ExamScene(std::vector<Scene*> scenes, ShaderHandler* handler, RenderWindow& renderWindow, float size) : Scene(scenes, handler, renderWindow, size)
 {
@@ -39,9 +40,12 @@ void ExamScene::createObjects()
 	dynamic_cast<Light*>(temp)->bMove = true;
 
 	// Oppgave 4 - Spiller
-	mObjects.push_back(temp = new InteractiveObject(*this, mShaderHandler->mShaderProgram[0]));
+	mObjects.push_back(temp = new InteractiveObject(*this, mShaderHandler->mShaderProgram[0], new OBJ(*this, mShaderHandler->mShaderProgram[2], "../3Dprog22/Assets/character/character_model2.obj", "../3Dprog22/Assets/character/character_texture.bmp")));
 	temp->setName("player");
 	temp->calculateNormals();
+
+	mObjects.push_back(temp = new OBJ(*this, mShaderHandler->mShaderProgram[2], "../3Dprog22/Assets/character/character_model.obj", "../3Dprog22/Assets/character/character_texture.bmp"));
+	temp->setName("obj");
 
 	for (auto it = mObjects.begin(); it != mObjects.end(); it++)
 		mMap.insert(std::pair<std::string, VisualObject*>((*it)->getName(), *it));

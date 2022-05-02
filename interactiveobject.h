@@ -12,12 +12,13 @@ class InteractiveObject : public VisualObject
 {
 public:
     InteractiveObject(Scene& scene, Shader* shaderProgram);
+	InteractiveObject(Scene& scene, Shader* shaderProgram, VisualObject* model);
     InteractiveObject(Scene& scene, Shader* shaderProgram, TriangleSurface* mySurface);
 
 	void createObject();
 
     ~InteractiveObject() override;
-
+	void init() override;
     void draw() override;
 	void move(float x, float y, float z) override;
 	void keyInput(bool key[5], float speed);
@@ -31,6 +32,7 @@ public:
 
 	HeightMap* mHeightmap{ nullptr };
 
+	VisualObject* mModel{ nullptr };
    private:
 	float mx, my, mz; // posisjon
 	TriangleSurface* mySurface{ nullptr };

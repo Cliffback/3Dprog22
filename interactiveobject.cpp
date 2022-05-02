@@ -2,12 +2,19 @@
 #include "heightmap.h"
 #include "renderwindow.h"
 #include "scene.h"
+#include "boundingshape.h"
 
 InteractiveObject::InteractiveObject(Scene& scene, Shader* shaderProgram) : VisualObject(scene, shaderProgram), mx{0.0f}, my{0.0f}, mz{0.0f}
 {
     createObject();
 
 }
+
+InteractiveObject::InteractiveObject(Scene& scene, Shader* shaderProgram, VisualObject* model) : VisualObject(scene, shaderProgram), mModel(model), mx{ 0.0f }, my{ 0.0f }, mz{ 0.0f }
+{
+    bShape = new AABB();
+}
+
 InteractiveObject::InteractiveObject(Scene& scene, Shader* shaderProgram, TriangleSurface* surface) : VisualObject(scene, shaderProgram), mx{0.0f}, my{0.0f}, mz{0.0f}, mySurface{surface}
 {
     createObject();
@@ -44,19 +51,37 @@ InteractiveObject::~InteractiveObject()
 
 }
 
+void InteractiveObject::init()
+{
+	if (mModel)
+        mModel->init();
+
+    else
+		VisualObject::init();
+}
+
 void InteractiveObject::draw()
 {
     drawCollision();
 
-    if (mTexture)
+    if (mModel)
     {
-        glActiveTexture(mShaderProgram->getShaderSlot());
-        glBindTexture(GL_TEXTURE_2D, mTexture->id());
+        mModel->draw();
     }
 
-    mShaderProgram->loadShader();
+    else
+    {
+        if (mTexture)
+        {
+            glActiveTexture(mShaderProgram->getShaderSlot());
+            glBindTexture(GL_TEXTURE_2D, mTexture->id());
+        }
 
-    VisualObject::draw();
+        mShaderProgram->loadShader();
+
+        VisualObject::draw();
+    }
+
 
 
     keyInput(mKey, 0.2f);
@@ -66,31 +91,61 @@ void InteractiveObject::draw()
 
 void InteractiveObject::move(float dx, float dy, float dz)
 {
-
     mx += dx * mSpeed;
     my += dy * mSpeed;
 
-    if (mHeightmap)
-    {
-        mz = mHeightmap->getHeight(glm::vec3(mx, my, mz));
+    // The following code could probably be set up way better
 
-        QVector4D pos{ mx,my,mz,1.0f };
-        mPosition.setColumn(3, pos);
-    	mMatrix = mPosition;
-    }
+	if (mModel)
+	{
+        if (mHeightmap)
+        {
+            mz = mHeightmap->getHeight(glm::vec3(mx, my, mz));
 
-    else
-    {
-        float temp = mathFunction(mx, my) - mz; // We get the z-difference since last frame from the surface
-        QVector4D pos{ mx,my,temp,1.0f };
-        mPosition.setColumn(3, pos);
-        mMatrix = mPosition;
-        mz = mathFunction(mx, my);
+            mModel->move(mx, my, mz);
+            
+            QVector4D pos{ mx,my,mz,1.0f };
+            mPosition.setColumn(3, pos);
+            mMatrix = mPosition;
+        }
 
-    }
+        else
+        {
+            float temp = mathFunction(mx, my) - mz; // We get the z-difference since last frame from the surface
 
+        	mModel->move(mx, my, temp);
 
-    bShape->position = glm::vec3(mx, my, 0.f);
+        	QVector4D pos{ mx,my,temp,1.0f };
+            mPosition.setColumn(3, pos);
+            mMatrix = mPosition;
+            mz = mathFunction(mx, my);
+        }
+	}
+
+	else
+	{
+        if (mHeightmap)
+        {
+            mz = mHeightmap->getHeight(glm::vec3(mx, my, mz));
+
+            QVector4D pos{ mx,my,mz,1.0f };
+            mPosition.setColumn(3, pos);
+            mMatrix = mPosition;
+        }
+
+        else
+        {
+            float temp = mathFunction(mx, my) - mz; // We get the z-difference since last frame from the surface
+            QVector4D pos{ mx,my,temp,1.0f };
+            mPosition.setColumn(3, pos);
+            mMatrix = mPosition;
+            mz = mathFunction(mx, my);
+
+        }
+	}
+
+	bShape->position = glm::vec3(mx, my, mz);
+
 
     //mScene.initQuadTre();
     //mScene.drawQuads();

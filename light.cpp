@@ -25,6 +25,7 @@ Light::Light(Scene& scene, Shader* shaderProgram, VisualObject* source) : Visual
     mLightSource->mMatrix.scale(5.f);
     mLightSource->move(0.f, 0.f, 20.f);
 	move(0.f, 0.f, 20.f);
+
 }
 
 void Light::init()
@@ -99,7 +100,7 @@ void Light::rotate(float speed)
 	if (mLightSource)
 	{
         //mLight->mMatrix.translate(sinf(rotate) / 100, cosf(rotate) / 100, cosf(rotate) / 60);     //just to move the light each frame
-        mLightSource->mMatrix.translate(sinf(rotate+10.f) / 100, cosf(rotate + 10.f) / 100, 0);     //just to move the light each frame
+        mLightSource->mMatrix.translate(sinf(rotate) / 100, cosf(rotate) / 100, 0);     //just to move the light each frame
 		mMatrix.translate(sinf(rotate) / 100, cosf(rotate) / 100, 0);     //just to move the light each frame
 
         rotate += speed;
