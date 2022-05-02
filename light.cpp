@@ -20,54 +20,98 @@ Light::Light(Scene& scene, Shader* shaderProgram) : VisualObject(scene, shaderPr
     mMatrix.setToIdentity();
 }
 
+Light::Light(Scene& scene, Shader* shaderProgram, VisualObject* source) : VisualObject(scene, shaderProgram), mLightSource{source}
+{
+    mLightSource->mMatrix.scale(5.f);
+    mLightSource->move(0.f, 0.f, 20.f);
+	move(0.f, 0.f, 20.f);
+}
+
 void Light::init()
 {
-    initializeOpenGLFunctions();
+    if (mLightSource) 
 
-    //Vertex Array Object - VAO
-    glGenVertexArrays(1, &mVAO);
-    glBindVertexArray(mVAO);
+        mLightSource->init();
 
-    //Vertex Buffer Object to hold vertices - VBO
-    glGenBuffers(1, &mVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
+    else
+    {
+        initializeOpenGLFunctions();
 
-    glBufferData(GL_ARRAY_BUFFER, mVertices.size() * sizeof(Vertex), mVertices.data(), GL_STATIC_DRAW);
+        //Vertex Array Object - VAO
+        glGenVertexArrays(1, &mVAO);
+        glBindVertexArray(mVAO);
 
-    // 1rst attribute buffer : vertices
-    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)0);
-    glEnableVertexAttribArray(0);
+        //Vertex Buffer Object to hold vertices - VBO
+        glGenBuffers(1, &mVBO);
+        glBindBuffer(GL_ARRAY_BUFFER, mVBO);
 
-    // 2nd attribute buffer : colors
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(1);
+        glBufferData(GL_ARRAY_BUFFER, mVertices.size() * sizeof(Vertex), mVertices.data(), GL_STATIC_DRAW);
 
-    // 3rd attribute buffer : uvs
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(6 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(2);
+        // 1rst attribute buffer : vertices
+        glBindBuffer(GL_ARRAY_BUFFER, mVBO);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)0);
+        glEnableVertexAttribArray(0);
 
-    //Second buffer - holds the indices (Element Array Buffer - EAB):
-    glGenBuffers(1, &mEAB);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEAB);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndices.size() * sizeof(GLuint), mIndices.data(), GL_STATIC_DRAW);
+        // 2nd attribute buffer : colors
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(3 * sizeof(GLfloat)));
+        glEnableVertexAttribArray(1);
 
-    glBindVertexArray(0);
+        // 3rd attribute buffer : uvs
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(6 * sizeof(GLfloat)));
+        glEnableVertexAttribArray(2);
+
+        //Second buffer - holds the indices (Element Array Buffer - EAB):
+        glGenBuffers(1, &mEAB);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEAB);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndices.size() * sizeof(GLuint), mIndices.data(), GL_STATIC_DRAW);
+
+        glBindVertexArray(0);
+    }
+    
 
 }
 
 void Light::draw()
 {
+    if (mLightSource)
+        mLightSource->draw();
+    else
+    {
+        mShaderProgram->loadShader();
+
+        glBindVertexArray(mVAO);
+        glUniformMatrix4fv(mShaderProgram->mMatrixUniform, 1, GL_FALSE, mMatrix.constData());
+        glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, nullptr);
+        glBindVertexArray(0);
+    }
+
     if (mTexture)
     {
         glActiveTexture(mShaderProgram->getShaderSlot());
         glBindTexture(GL_TEXTURE_2D, mTexture->id());
     }
-
-    mShaderProgram->loadShader();
-
-    glBindVertexArray(mVAO);
-    glUniformMatrix4fv(mShaderProgram->mMatrixUniform, 1, GL_FALSE, mMatrix.constData());
-    glDrawElements(GL_TRIANGLES, mIndices.size(), GL_UNSIGNED_INT, nullptr);
-    glBindVertexArray(0);
 }
+
+void Light::rotate(float speed)
+{
+        static float rotate{ 0.f };
+    // float speed = 0.01f;
+	if (mLightSource)
+	{
+        //mLight->mMatrix.translate(sinf(rotate) / 100, cosf(rotate) / 100, cosf(rotate) / 60);     //just to move the light each frame
+        mLightSource->mMatrix.translate(sinf(rotate+10.f) / 100, cosf(rotate + 10.f) / 100, 0);     //just to move the light each frame
+		mMatrix.translate(sinf(rotate) / 100, cosf(rotate) / 100, 0);     //just to move the light each frame
+
+        rotate += speed;
+	}
+
+    else
+    {
+        static float rotate{ 0.f };
+
+        mMatrix.translate(sinf(rotate) / 100, cosf(rotate) / 100, 0);     //just to move the light each frame
+
+        rotate += speed;
+    }
+}
+

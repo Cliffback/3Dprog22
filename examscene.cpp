@@ -5,6 +5,7 @@
 #include "interactiveobject.h"
 #include "renderwindow.h"
 #include "light.h"
+#include "octahedronball.h"
 
 ExamScene::ExamScene(std::vector<Scene*> scenes, ShaderHandler* handler, RenderWindow& renderWindow, float size) : Scene(scenes, handler, renderWindow, size)
 {
@@ -25,16 +26,17 @@ void ExamScene::createObjects()
 
 
 	// Oppgave 2 - Heightmap
-	mObjects.push_back(temp = new HeightMap(*this, mShaderHandler->mShaderProgram[2], new Texture("../3Dprog22/Assets/heightmap.bmp"),1,0.1f,0.5f,-30.f));
+	mObjects.push_back(temp = new HeightMap(*this, mShaderHandler->mShaderProgram[2], new Texture("../3Dprog22/Assets/heightmap.bmp"),1,0.06f,0.5f,-30.f));
 	temp->setName("heightmap");
 	temp->loadTexture(new Texture("../3Dprog22/Assets/grass.bmp"));
 	mapSize = dynamic_cast<HeightMap*>(temp)->getSize() / 2;
 
 	// Oppgave 3 - Lys
-	mObjects.push_back(temp = new Light(*this, mShaderHandler->mShaderProgram[0]));
+	mObjects.push_back(temp = new Light(*this, mShaderHandler->mShaderProgram[0], new OctahedronBall(*this, mShaderHandler->mShaderProgram[0],3)));
 	temp->setName("light");
 	temp->mMatrix.translate(-6.f, -6.f, 10.f);
 	temp->mMatrix.scale(10.f);
+	dynamic_cast<Light*>(temp)->bMove = true;
 
 	// Oppgave 4 - Spiller
 	mObjects.push_back(temp = new InteractiveObject(*this, mShaderHandler->mShaderProgram[0]));
@@ -64,6 +66,9 @@ void ExamScene::renderObjects()
 
 	for (auto it = mMap.begin(); it != mMap.end(); it++)
     (*it).second->draw();
+
+	if (dynamic_cast<Light*>(mMap["light"])->bMove)
+		dynamic_cast<Light*>(mMap["light"])->rotate(0.1f);
 
 }
 
