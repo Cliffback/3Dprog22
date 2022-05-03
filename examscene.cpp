@@ -179,6 +179,14 @@ void ExamScene::createObjects()
 	float tempHeight{ 0.f };
 	float tempOffset{ 2.f };
 
+
+	srand(time(NULL));
+
+	for (int i = 0; i < 10; ++i)
+	{
+		std::cout <<" rand: " << rand() % 10 + 1 << std::endl;
+
+	}
 	tempPos = glm::vec3{ 17.f,7.f,0.f };
 	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
 	mMap["token1"]->move(tempPos.x, tempPos.y, tempHeight);

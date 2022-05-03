@@ -173,6 +173,9 @@
     <ClCompile Include="fence.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="enemy.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="beziercurve.h">
@@ -299,6 +302,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="fence.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="enemy.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>

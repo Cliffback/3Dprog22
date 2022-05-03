@@ -200,6 +200,7 @@
     <ClCompile Include="door.cpp" />
     <ClCompile Include="door1.cpp" />
     <ClCompile Include="door2.cpp" />
+    <ClCompile Include="enemy.cpp" />
     <ClCompile Include="examscene.cpp" />
     <ClCompile Include="fence.cpp" />
     <ClCompile Include="heightmap.cpp" />
@@ -244,6 +245,7 @@
     <ClInclude Include="door.h" />
     <ClInclude Include="door1.h" />
     <ClInclude Include="door2.h" />
+    <ClInclude Include="enemy.h" />
     <ClInclude Include="examscene.h" />
     <ClInclude Include="fence.h" />
     <ClInclude Include="heightmap.h" />
