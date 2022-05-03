@@ -13,7 +13,7 @@ public:
     Token(Scene& scene, Shader* shaderProgram, VisualObject* object);
     void move(float x, float y, float z) override;
     void construct(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax);
-    void collision(VisualObject* object) override;
+    void collision(VisualObject* object) override { ; };
     void activate() override;
 
     void init() override;

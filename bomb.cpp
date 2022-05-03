@@ -119,8 +119,11 @@ void Bomb::fall()
 
 void Bomb::collision(VisualObject* player)
 {
+	if (player->getName() == "player")
+	{
 	dynamic_cast<InteractiveObject*>(player)->gotHit();
 
     visible = false;
+	}
 
 }

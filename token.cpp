@@ -2,6 +2,7 @@
 
 #include "renderwindow.h"
 #include "scene.h"
+#include "enemy.h"
 
 Token::Token(Scene& scene, Shader* shaderProgram) : VisualObject(scene, shaderProgram), mObject{ nullptr }
 {
@@ -10,6 +11,8 @@ Token::Token(Scene& scene, Shader* shaderProgram) : VisualObject(scene, shaderPr
     construct(xmin, xmax, ymin, ymax, zmin, zmax);
     mMatrix.setToIdentity();
     bShape = new AABB();
+
+    enemyCollision = true;
 
 }
 
@@ -77,18 +80,21 @@ void Token::construct(float xmin, float xmax, float ymin, float ymax, float zmin
 
 }
 
-void Token::collision(VisualObject* object)
-{
-    if (!visible) { return; }
-
-    else 
-    {
-        dynamic_cast<InteractiveObject*>(object)->gatherToken();
-        visible = false;
-    }
-
-
-}
+//void Token::collision(VisualObject* object)
+//{
+//    if (!visible) { return; }
+//
+//    else 
+//    {
+//        visible = false;
+//	    if (object->getName() == "player")
+//			dynamic_cast<InteractiveObject*>(object)->gatherToken();
+//	    else if (object->getName() == "enemy")
+//            dynamic_cast<Enemy*>(object)->gatherToken();
+//    }
+//
+//
+//}
 
 void Token::activate()
 {
@@ -150,7 +156,17 @@ PlayerToken::PlayerToken(Scene& scene, Shader* shaderProgram, VisualObject* obje
 
 void PlayerToken::collision(VisualObject* object)
 {
-    Token::collision(object);
+    if (!visible) { return; }
+
+    else
+    {
+        if (object->getName() == "player")
+        {
+        	visible = false;
+            dynamic_cast<InteractiveObject*>(object)->gatherToken();
+        }
+
+    }
 }
 
 NPCToken::NPCToken(Scene& scene, Shader* shaderProgram, VisualObject* object) : Token(scene, shaderProgram, object)
@@ -159,7 +175,17 @@ NPCToken::NPCToken(Scene& scene, Shader* shaderProgram, VisualObject* object) : 
 
 void NPCToken::collision(VisualObject* object)
 {
-//
+    if (!visible) { return; }
+
+    else
+    {
+    	if (object->getName() == "enemy")
+    	{
+			visible = false;
+            dynamic_cast<Enemy*>(object)->gatherToken();
+    	}
+    }
+
 }
 
 void Token::move(float x, float y, float z)

@@ -15,6 +15,7 @@
 #include "camera.h"
 #include "square.h"
 #include "bomb.h"
+#include "enemy.h"
 
 Scene::Scene(std::vector<Scene*> scenes, ShaderHandler* handler, RenderWindow& renderWindow, float size)
 	: mScenes{ scenes }
@@ -182,13 +183,19 @@ void Scene::initQuadTre()
 	            mQuadTre.insert((*it)->bShape, (*it)->getName(), *it);
 	}
 
-	if (!mTokens.empty())
+	if (!mPlayerTokens.empty())
 	{
-        for (auto it = mTokens.begin(); it != mTokens.end(); it++)
+        for (auto it = mPlayerTokens.begin(); it != mPlayerTokens.end(); it++)
             if ((*it)->bShape)
                 mQuadTre.insert((*it)->bShape, (*it)->getName(), *it);
 	}
 
+    if (!mEnemyTokens.empty())
+    {
+        for (auto it = mEnemyTokens.begin(); it != mEnemyTokens.end(); it++)
+            if ((*it)->bShape)
+                mQuadTre.insert((*it)->bShape, (*it)->getName(), *it);
+    }
     //mQuadTre.print_all();
 
 }
@@ -226,6 +233,18 @@ void Scene::collisionCheck()
         return;
     else
         getPlayer()->bBlockPlayer = false;
+
+	if (mMap["enemy"])
+	{
+        auto posisjon = mMap["enemy"]->getPosition2D();
+        auto subtre = mQuadTre.find(posisjon);
+        for (auto it = subtre->begin(); it != subtre->end(); it++)
+            if ((*it)->bShape && mMap["enemy"]->bShape->overlap((*it)->bShape))
+            {
+                (*it)->collision(mMap["enemy"]);
+
+            }
+    }
 }
 
 void Scene::nextScene()

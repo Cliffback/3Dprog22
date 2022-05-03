@@ -51,8 +51,8 @@ public:
     std::unordered_map<std::string, VisualObject*> mMap;
     std::unordered_map<std::string, VisualObject*> mQuads;
     std::vector<Bomb*> mBombs;
-    std::vector<Token*> mTokens;
-
+    std::vector<Token*> mPlayerTokens;
+    std::vector<Token*> mEnemyTokens;
 
 	bool isActivated{false};
     gsml::QuadTre<std::string, VisualObject*> mQuadTre;

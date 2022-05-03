@@ -20,13 +20,14 @@ public:
 
 	void checkWon();
 
+
 private:
 	std::unordered_map<std::string, Route*> mRoutes;
 	bool mMove{ true };     //Check if triangle should move
 	int bombDeleteCount{ 0 };
 	int bombNumber{ 0 };
 	bool bWonGame{ false };
-
+	bool bLostGame{ false };
 
 	//template<class T> void purge(std::vector<T>& v) {
 	//	for (auto item : v) delete item;

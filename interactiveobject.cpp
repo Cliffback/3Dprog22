@@ -67,25 +67,11 @@ void InteractiveObject::draw()
     drawCollision();
 
     if (mModel)
-    {
         mModel->draw();
-    }
 
     else
-    {
-        if (mTexture)
-        {
-            glActiveTexture(mShaderProgram->getShaderSlot());
-            glBindTexture(GL_TEXTURE_2D, mTexture->id());
-        }
-
-        mShaderProgram->loadShader();
-
         VisualObject::draw();
-    }
-
-
-
+  
     keyInput(mKey, 0.2f);
 
 }

@@ -17,6 +17,7 @@
 #include "cube.h"
 #include "fence.h"
 #include "billboard.h"
+#include "enemy.h"
 
 ExamScene::ExamScene(std::vector<Scene*> scenes, ShaderHandler* handler, RenderWindow& renderWindow, float size) : Scene(scenes, handler, renderWindow, size)
 {
@@ -77,10 +78,15 @@ void ExamScene::createObjects()
 	temp->setName("fence1");
 	temp->move(5.f, 5.f, 5.f);
 
+	mObjects.push_back(temp = new Enemy(*this, mShaderHandler->mShaderProgram[0]));
+	temp->setName("enemy");
+
 	for (auto it = mObjects.begin(); it != mObjects.end(); it++)
 		mMap.insert(std::pair<std::string, VisualObject*>((*it)->getName(), *it));
 
-	dynamic_cast<InteractiveObject*>(mMap["player"])->setHeightmap(static_cast<HeightMap*>(mMap["heightmap"]));
+	dynamic_cast<InteractiveObject*>(mMap["player"])->setHeightmap(dynamic_cast<HeightMap*>(mMap["heightmap"]));
+	dynamic_cast<Enemy*>(mMap["enemy"])->setHeightmap(dynamic_cast<HeightMap*>(mMap["heightmap"]));
+	mMap["enemy"]->move(5.f, 5.f, 0.f);
 
 	tokenSpawner();
 }
@@ -108,7 +114,6 @@ void ExamScene::createRoutes()
 
 void ExamScene::tokenSpawner()
 {
-
 	// Oppgave 8 - Tokens
 	srand(time(NULL));
 	Cube* cubeTemp{ nullptr };
@@ -143,7 +148,7 @@ void ExamScene::tokenSpawner()
 
 		tempToken->move(tempPos.x, tempPos.y, tempHeight);
 
-		mTokens.push_back(tempToken);
+		mPlayerTokens.push_back(tempToken);
 	}
 
 	// NPC tokens
@@ -159,15 +164,16 @@ void ExamScene::tokenSpawner()
 
 		tempToken->setName("npctoken" + std::to_string(i));
 
-		tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-
 		tempPos = glm::vec3{
 			rand() % max + min,
 			rand() % max + min,
 			tempHeight };
+
+		tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
+
 		tempToken->move(tempPos.x, tempPos.y, tempHeight);
 
-		mTokens.push_back(tempToken);
+		mEnemyTokens.push_back(tempToken);
 	}
 
 
@@ -223,7 +229,13 @@ void ExamScene::billboardSpawner()
 	QVector3D offset{ 0.f,-2.f,0.f };
 	QVector3D billboardPos{ playerPos + offset};
 
-	Billboard* temp = new Billboard(*this, mShaderHandler->mShaderProgram[1], mCamera, "../3Dprog22/Assets/youwin.bmp");
+	Billboard* temp{ nullptr };
+
+	if (bWonGame)
+		temp = new Billboard(*this, mShaderHandler->mShaderProgram[1], mCamera, "../3Dprog22/Assets/youwin.bmp");
+
+	else if (bLostGame)
+		temp = new Billboard(*this, mShaderHandler->mShaderProgram[1], mCamera, "../3Dprog22/Assets/youloose.bmp");
 
 	temp->setName("billboard");
 	temp->move(billboardPos.x(),billboardPos.y(),billboardPos.z());
@@ -238,8 +250,14 @@ void ExamScene::checkWon()
 {
 	if (!bWonGame && dynamic_cast<InteractiveObject*>(mMap["player"])->myTokens >= 10)
 	{
-		billboardSpawner();
 		bWonGame = true;
+		billboardSpawner();
+	}
+
+	else if (!bLostGame && dynamic_cast<Enemy*>(mMap["enemy"])->myTokens >= 10)
+	{
+		bLostGame = true;
+		billboardSpawner();
 	}
 }
 
@@ -249,7 +267,10 @@ void ExamScene::init()
 	for (auto it = mMap.begin(); it != mMap.end(); it++)
 		(*it).second->init();
 
-	for (auto it = mTokens.begin(); it != mTokens.end(); it++)
+	for (auto it = mPlayerTokens.begin(); it != mPlayerTokens.end(); it++)
+		(*it)->init();
+
+	for (auto it = mEnemyTokens.begin(); it != mEnemyTokens.end(); it++)
 		(*it)->init();
 
 }
@@ -258,6 +279,7 @@ void ExamScene::renderObjects()
 {
 	checkWon();
 	bombSpawner();
+	dynamic_cast<Enemy*>(mMap["enemy"])->getDestination(mEnemyTokens);
 
 	mShaderHandler->mShaderProgram[0]->init(mCamera);
 	mShaderHandler->mShaderProgram[1]->init(mCamera);
@@ -267,12 +289,14 @@ void ExamScene::renderObjects()
 	for (auto it = mMap.begin(); it != mMap.end(); it++)
     (*it).second->draw();
 
-	for (auto it = mTokens.begin(); it != mTokens.end(); it++)
+	for (auto it = mPlayerTokens.begin(); it != mPlayerTokens.end(); it++)
+		(*it)->draw();
+
+	for (auto it = mEnemyTokens.begin(); it != mEnemyTokens.end(); it++)
 		(*it)->draw();
 
 	if (dynamic_cast<Light*>(mMap["light"])->bMove)
 		dynamic_cast<Light*>(mMap["light"])->rotate(0.1f);
-
 
 	bombDeleter();
 

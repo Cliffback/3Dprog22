@@ -57,6 +57,8 @@ public:
 
 	bool blockPlayer{ false };
 
+	bool enemyCollision{ false };
+
 protected:
 	std::vector<Vertex> mVertices;
 	std::vector<GLuint> mIndices;
