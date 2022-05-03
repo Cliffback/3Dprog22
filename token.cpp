@@ -77,13 +77,13 @@ void Token::construct(float xmin, float xmax, float ymin, float ymax, float zmin
 
 }
 
-void Token::collision(VisualObject* player)
+void Token::collision(VisualObject* object)
 {
     if (!visible) { return; }
 
     else 
     {
-        dynamic_cast<InteractiveObject*>(player)->gatherToken();
+        dynamic_cast<InteractiveObject*>(object)->gatherToken();
         visible = false;
     }
 
@@ -141,6 +141,25 @@ void Token::hide()
     visible = false;
     mPlayer->gatherToken();
 
+}
+
+PlayerCube::PlayerCube(Scene& scene, Shader* shaderProgram, VisualObject* object) : Token(scene, shaderProgram, object)
+{
+
+}
+
+void PlayerCube::collision(VisualObject* object)
+{
+    Token::collision(object);
+}
+
+NPCToken::NPCCube(Scene& scene, Shader* shaderProgram, VisualObject* object) : Token(scene, shaderProgram, object)
+{
+}
+
+void NPCToken::collision(VisualObject* object)
+{
+	//
 }
 
 void Token::move(float x, float y, float z)

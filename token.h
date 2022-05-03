@@ -5,15 +5,16 @@
 #include "trianglesurface.h"
 #include "interactiveobject.h"
 
+class NPC;
 class Token : public VisualObject
 {
 public:
     Token(Scene& scene, Shader* shaderProgram);
     Token(Scene& scene, Shader* shaderProgram, VisualObject* object);
     void move(float x, float y, float z) override;
-    void construct(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax);
+    void construct(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax);\
 
-    void collision(VisualObject* player) override;
+    void collision(VisualObject* object) override;
     void activate() override;
 
     void init() override;
@@ -26,9 +27,25 @@ public:
 
     float mx, my, mz;
 
+    bool visible{true};
 private:
 
-    bool visible{true};
+
+};
+
+class PlayerCube : public Token
+{
+public:
+    PlayerCube(Scene& scene, Shader* shaderProgram, VisualObject* object);
+	void collision(VisualObject* object) override;
+
+};
+
+class NPCCube : public Token
+{
+public:
+    NPCCube(Scene& scene, Shader* shaderProgram, VisualObject* object);
+    void collision(VisualObject* object) override;
 
 };
 

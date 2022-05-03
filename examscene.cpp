@@ -13,6 +13,8 @@
 #include "route.h"
 #include "skybox.h"
 #include "bomb.h"
+#include "token.h"
+#include "cube.h"
 
 ExamScene::ExamScene(std::vector<Scene*> scenes, ShaderHandler* handler, RenderWindow& renderWindow, float size) : Scene(scenes, handler, renderWindow, size)
 {
@@ -64,6 +66,12 @@ void ExamScene::createObjects()
 	temp->setName("skybox");
 	temp->move(5.f, 5.f, 20.f);
 
+	Cube* playerTemp{ *this, mShaderHandler->mShaderProgram[0], 0.5f,QVector3D{1,0,0}};
+	mObjects.push_back(temp = new PlayerToken(*this, mShaderHandler->mShaderProgram[0], playerTemp));
+	temp->setName("token1");
+	temp->move(7.f, -2.f, 1.f);
+
+
 	for (auto it = mObjects.begin(); it != mObjects.end(); it++)
 		mMap.insert(std::pair<std::string, VisualObject*>((*it)->getName(), *it));
 
@@ -110,7 +118,7 @@ void ExamScene::bombSpawner()
 		for (auto it = mBombs.begin(); it != mBombs.end(); it++)
 		{
 			(*it)->draw();
-			// Code for removing the bomb
+			// Code for removing the bomb, using a timer in the Bomb class
 			if ((*it)->remove)
 				bombDeleteCount++;
 		}
@@ -119,6 +127,7 @@ void ExamScene::bombSpawner()
 
 }
 
+// Makes sure the bombs are deleted after a while
 void ExamScene::bombDeleter()
 {
 	if (bombDeleteCount > 0)
@@ -143,7 +152,7 @@ void ExamScene::init()
 
 void ExamScene::renderObjects()
 {
-	bombDeleter();
+	bombSpawner();
 
 	mShaderHandler->mShaderProgram[0]->init(mCamera);
 	mShaderHandler->mShaderProgram[1]->init(mCamera);
@@ -157,7 +166,7 @@ void ExamScene::renderObjects()
 		dynamic_cast<Light*>(mMap["light"])->rotate(0.1f);
 
 
-	bombSpawner();
+	bombDeleter();
 
 }
 
