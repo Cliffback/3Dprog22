@@ -111,33 +111,20 @@ void InteractiveObject::blockPlayer(BoundingShape* shape)
 // Oppgave 10
 bool InteractiveObject::willCollide(glm::vec3 prevPos, glm::vec3 futurePos)
 {
-    //BoundingShape* bShapeNew = bShape;
-    //glm::vec3 toMove(futurePos - prevPos);
-
-    //bShapeNew->position += toMove;
-
-    //if (bShapeNew->overlap(blockerShape))
-    //    return true;
-
     BoundingShape* bShapeNew = new AABB();
     bShapeNew->position = glm::vec3(futurePos.x + collisionOffset.x, futurePos.y + collisionOffset.y, futurePos.z + collisionOffset.z);
 
     if (bShapeNew->overlap(blockerShape))
         return true;
     else
-    {
-        std::cout << "test";
         return false;
-    }
-
-
 }
 
 
 void InteractiveObject::move(float dx, float dy, float dz)
 {
+    // Oppgave 7 - bomb code
     glm::vec3 prevPos(mx, my, mz);
-
 	if (bCoolingDown  == true)
 	{
         current = Clock::now();
@@ -161,7 +148,6 @@ void InteractiveObject::move(float dx, float dy, float dz)
             mx = prevPos.x;
             my = prevPos.y;
             mz = prevPos.z;
-            //bShape->position = glm::vec3(mx + collisionOffset.x, my + collisionOffset.y, mz + collisionOffset.z);
             return;
         }
 

@@ -9,6 +9,15 @@ Billboard::Billboard(Scene& scene, Shader* shaderProgram, Camera* camera) : Visu
     createObject();
 }
 
+Billboard::Billboard(Scene& scene, Shader* shaderProgram, Camera* camera, const std::string texturedir) : VisualObject(scene, shaderProgram)
+{
+
+	mTexture = new Texture(texturedir);
+    mCamera = camera;
+    createObject();
+
+}
+
 Billboard::~Billboard()
 {
 	
@@ -17,8 +26,8 @@ Billboard::~Billboard()
 
 void Billboard::createObject()
 {
-	squareVertices = glm::vec3(-0.5f, -0.5f, 0.f);
-	billboardSize = glm::vec3(1.f, 1.f, 0.f);
+	squareVertices = glm::vec3(-3.f, -3.f, 0.f);
+	billboardSize = glm::vec3(6.f, 6.f, 0.f);
 	billboardCenter = glm::vec3(0.f, 0.f, 0.f);
 
 	float xmin{ squareVertices.x };
@@ -48,15 +57,15 @@ void Billboard::rotate()
 	if (!mCamera)
         return;
 
-    //QMatrix4x4 matrix = mCamera->mVmatrix.inverted();
+    QMatrix4x4 matrix = mCamera->mVmatrix.inverted();
 
-    //QVector4D rightVector = matrix.column(0);
-    //QVector4D upVector = matrix.column(1);
-    //QVector4D forwardVector = matrix.column(2);
+    QVector4D rightVector = matrix.column(0);
+    QVector4D upVector = matrix.column(1);
+    QVector4D forwardVector = matrix.column(2);
 
-    //mMatrix.setColumn(0, rightVector);
-    //mMatrix.setColumn(1, upVector);
-    //mMatrix.setColumn(2, forwardVector);
+    mMatrix.setColumn(0, rightVector);
+    mMatrix.setColumn(1, upVector);
+    mMatrix.setColumn(2, forwardVector);
 
  //   QVector3D position = QVector3D(mPosition.column(3).x(), mPosition.column(3).y(), mPosition.column(3).z());
 
@@ -74,23 +83,23 @@ void Billboard::rotate()
 	//mMatrix.setColumn(2, forwardVector);
 
 
-    glm::mat4 matrix(1.f);
-    matrix = glm::lookAt(
-        glm::vec3(mPosition.column(3).x(), mPosition.column(3).y(), mPosition.column(3).z()),
-        glm::vec3(mCamera->getPosition().x(), mCamera->getPosition().y(), mCamera->getPosition().z()),
-        mCamera->getUp());
-    matrix = glm::inverse(matrix);
+    //glm::mat4 matrix(1.f);
+    //matrix = glm::lookAt(
+    //    glm::vec3(mPosition.column(3).x(), mPosition.column(3).y(), mPosition.column(3).z()),
+    //    glm::vec3(mCamera->getPosition().x(), mCamera->getPosition().y(), mCamera->getPosition().z()),
+    //    mCamera->getUp());
+    //matrix = glm::inverse(matrix);
 
-    glm::vec4 rightVector = matrix[0];
-    glm::vec4 upVector = matrix[1];
-    glm::vec4 forwardVector = matrix[2];
+    //glm::vec4 rightVector = matrix[0];
+    //glm::vec4 upVector = matrix[1];
+    //glm::vec4 forwardVector = matrix[2];
 
 
-    QVector4D(matrix[2].x, matrix[2].y, matrix[2].z, 1.f);
+    //QVector4D(matrix[2].x, matrix[2].y, matrix[2].z, 1.f);
 
-    mMatrix.setColumn(0, QVector4D(rightVector.x, rightVector.y, rightVector.z, rightVector.w));
-    mMatrix.setColumn(1, QVector4D(upVector.x, upVector.y, upVector.z, upVector.w));
-    mMatrix.setColumn(2, QVector4D(forwardVector.x, forwardVector.y, forwardVector.z, forwardVector.w));
+    //mMatrix.setColumn(0, QVector4D(rightVector.x, rightVector.y, rightVector.z, rightVector.w));
+    //mMatrix.setColumn(1, QVector4D(upVector.x, upVector.y, upVector.z, upVector.w));
+    //mMatrix.setColumn(2, QVector4D(forwardVector.x, forwardVector.y, forwardVector.z, forwardVector.w));
 
 
 }

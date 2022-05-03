@@ -41,11 +41,11 @@ public:
 
 	bool bBlockPlayer{ false };
 	bool mKey[5]{ false };
+	int myTokens{0};
 
 private:
 	float mx, my, mz; // posisjon
 	TriangleSurface* mySurface{ nullptr };
-	int myTokens{0};
 	float mSpeed{ 1.f };
 	gsml::QuadTre<std::string, VisualObject*> mQuadTre;
 

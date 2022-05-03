@@ -16,6 +16,7 @@
 #include "token.h"
 #include "cube.h"
 #include "fence.h"
+#include "billboard.h"
 
 ExamScene::ExamScene(std::vector<Scene*> scenes, ShaderHandler* handler, RenderWindow& renderWindow, float size) : Scene(scenes, handler, renderWindow, size)
 {
@@ -75,6 +76,10 @@ void ExamScene::createObjects()
 	mObjects.push_back(temp = new Fence(*this, mShaderHandler->mShaderProgram[0], fenceTemp));
 	temp->setName("fence1");
 	temp->move(5.f, 5.f, 5.f);
+
+	//mObjects.push_back(temp = new Billboard(*this, mShaderHandler->mShaderProgram[1], mCamera, "../3Dprog22/Assets/hund.bmp"));
+	//temp->setName("billboard");
+	//temp->move(0.f, -2.f, 3.f);
 
 	// Oppgave 8 - Tokens
 	Cube* cubeTemp{ nullptr };
@@ -162,7 +167,6 @@ void ExamScene::createObjects()
 	mObjects.push_back(temp = new NPCToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
 	temp->setName("token20");
 
-
 	for (auto it = mObjects.begin(); it != mObjects.end(); it++)
 		mMap.insert(std::pair<std::string, VisualObject*>((*it)->getName(), *it));
 
@@ -238,6 +242,7 @@ void ExamScene::createObjects()
 	mMap["token20"]->move(tempPos.x, tempPos.y, tempHeight);
 
 
+	//billboardSpawner();
 }
 
 void ExamScene::createRoutes()
@@ -304,6 +309,33 @@ void ExamScene::bombDeleter()
 		}
 }
 
+// Oppgave 11
+void ExamScene::billboardSpawner()
+{
+	QVector3D playerPos{ mMap["player"]->getXYZ('x'), mMap["player"]->getXYZ('y'),  mMap["player"]->getXYZ('z') };
+	QVector3D offset{ 0.f,-2.f,0.f };
+	QVector3D billboardPos{ playerPos + offset};
+
+	Billboard* temp = new Billboard(*this, mShaderHandler->mShaderProgram[1], mCamera, "../3Dprog22/Assets/youwin.bmp");
+
+	temp->setName("billboard");
+	temp->move(billboardPos.x(),billboardPos.y(),billboardPos.z());
+	//temp->move(0.f, -2.f, 3.f);
+	temp->init();
+	mMap.insert(std::pair<std::string, VisualObject*>(temp->getName(), temp));
+
+}
+
+// Oppgave 11
+void ExamScene::checkWon()
+{
+	if (!bWonGame && dynamic_cast<InteractiveObject*>(mMap["player"])->myTokens >= 10)
+	{
+		billboardSpawner();
+		bWonGame = true;
+	}
+}
+
 void ExamScene::init()
 {
 
@@ -314,6 +346,7 @@ void ExamScene::init()
 
 void ExamScene::renderObjects()
 {
+	checkWon();
 	bombSpawner();
 
 	mShaderHandler->mShaderProgram[0]->init(mCamera);

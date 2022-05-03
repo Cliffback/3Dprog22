@@ -15,12 +15,16 @@ public:
 	void createRoutes();
 	void bombSpawner();
 	void bombDeleter();
+	void billboardSpawner();
+
+	void checkWon();
 
 private:
 	std::unordered_map<std::string, Route*> mRoutes;
 	bool mMove{ true };     //Check if triangle should move
 	int bombDeleteCount{ 0 };
 	int bombNumber{ 0 };
+	bool bWonGame{ false };
 
 
 	//template<class T> void purge(std::vector<T>& v) {

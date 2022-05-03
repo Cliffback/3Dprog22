@@ -5,6 +5,7 @@ class Billboard : public VisualObject
 {
 public: 
 	Billboard(Scene &scene, Shader* shaderProgram, Camera* camera);
+	Billboard(Scene& scene, Shader* shaderProgram, Camera* camera, const std::string texturedir);
 	~Billboard();
 
 	void init() override;
