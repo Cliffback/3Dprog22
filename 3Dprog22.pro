@@ -8,6 +8,7 @@ TARGET      = 3D-programmering
 SOURCES += main.cpp \
     beziercurve.cpp \
     billboard.cpp \
+    bomb.cpp \
     boundingshape.cpp \
     camera.cpp \
     cube.cpp \
@@ -49,6 +50,7 @@ SOURCES += main.cpp \
 HEADERS += \
     beziercurve.h \
     billboard.h \
+    bom.h \
     boundingshape.h \
     camera.h \
     cube.h \

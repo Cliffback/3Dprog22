@@ -27,7 +27,7 @@ Cube::Cube(Scene& scene, Shader* shaderProgram, float radius, QVector3D color) :
     construct(xmin, xmax, ymin, ymax, zmin, zmax, color);
     mMatrix.setToIdentity();
     bShape = new AABB();
-
+    bRotate = true;
 }
 
 Cube::Cube(Scene& scene, Shader* shaderProgram, float xmin, float xmax, float ymin, float ymax, float zmin, float zmax) : VisualObject(scene, shaderProgram)
@@ -35,7 +35,6 @@ Cube::Cube(Scene& scene, Shader* shaderProgram, float xmin, float xmax, float ym
     construct(xmin,xmax,ymin,ymax,zmin,zmax);
     mMatrix.setToIdentity();
     bShape = new AABB();
-
 
 }
 
@@ -99,6 +98,8 @@ void Cube::construct(float xmin, float xmax, float ymin, float ymax, float zmin,
     mVertices.push_back(Vertex{ xmax, ymin, zmin,  1,0,0}); // B
     mVertices.push_back(Vertex{ xmax, ymin, zmax,  0,1,1}); // H
 
+    cubeSize = glm::vec3(abs(xmax - xmin)/2, abs(ymax - ymin) / 2, abs(zmax - zmin) / 2);
+
 }
 
 void Cube::construct(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax, QVector3D color)
@@ -159,14 +160,21 @@ void Cube::construct(float xmin, float xmax, float ymin, float ymax, float zmin,
     mVertices.push_back(Vertex{ xmin, ymin, zmax,  color.x(),color.y(),color.z() }); // G
     mVertices.push_back(Vertex{ xmax, ymin, zmin,  color.x(),color.y(),color.z() }); // B
     mVertices.push_back(Vertex{ xmax, ymin, zmax,  color.x(),color.y(),color.z() }); // H
+
+    cubeSize = glm::vec3(abs(xmax - xmin) / 2, abs(ymax - ymin) / 2, abs(zmax - zmin) / 2);
 }
+
+
 
 void Cube::draw()
 {
-    VisualObject::draw();
+	if (bRotate)
+	{
+	    static float speed{1.f};
+	    mMatrix.rotate(speed, 1.f, 1.0f, 1.f);
+	}
 
-    static float speed{1.f};
-    mMatrix.rotate(speed, 1.f, 1.0f, 1.f);
+    VisualObject::draw();
 
 
 

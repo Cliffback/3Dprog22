@@ -16,8 +16,10 @@ public:
     void construct(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax);
     void construct(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax, QVector3D color);
 
-    void draw() override;
+    glm::vec3 cubeSize{0.f,0.f,0.f};
 
+    void draw() override;
+    bool bRotate{ false };
  };
 
 #endif // CUBE_H

@@ -53,7 +53,9 @@ public:
 	Scene& mScene;
 	void drawCollision();
 	Shader* mShaderProgram{ nullptr }; //We can hold 4 shaders
+	glm::vec3 collisionOffset{0.f,0.f,0.f};
 
+	bool blockPlayer{ false };
 
 protected:
 	std::vector<Vertex> mVertices;
@@ -77,7 +79,6 @@ protected:
 
 	std::string mName;
 
-	glm::vec3 collisionOffset{0.f,0.f,0.f};
 
 	Texture* mTexture{nullptr};
 

@@ -96,31 +96,76 @@ void InteractiveObject::gotHit()
     //    std::cout << "test";
 
     hitTimes++;
-    bStopMove = true;
+    bCoolingDown = true;
     hit = Clock::now();
+
+}
+
+void InteractiveObject::blockPlayer(BoundingShape* shape)
+{
+    // check last key used and block movement that direction
+    bBlockPlayer = true;
+    blockerShape = shape;
+}
+
+// Oppgave 10
+bool InteractiveObject::willCollide(glm::vec3 prevPos, glm::vec3 futurePos)
+{
+    //BoundingShape* bShapeNew = bShape;
+    //glm::vec3 toMove(futurePos - prevPos);
+
+    //bShapeNew->position += toMove;
+
+    //if (bShapeNew->overlap(blockerShape))
+    //    return true;
+
+    BoundingShape* bShapeNew = new AABB();
+    bShapeNew->position = glm::vec3(futurePos.x + collisionOffset.x, futurePos.y + collisionOffset.y, futurePos.z + collisionOffset.z);
+
+    if (bShapeNew->overlap(blockerShape))
+        return true;
+    else
+    {
+        std::cout << "test";
+        return false;
+    }
+
 
 }
 
 
 void InteractiveObject::move(float dx, float dy, float dz)
 {
-	if (bStopMove  == true)
+    glm::vec3 prevPos(mx, my, mz);
+
+	if (bCoolingDown  == true)
 	{
         current = Clock::now();
 		if (current > cooldown + hit)
 		{
-            bStopMove = false;
+            bCoolingDown = false;
             return;
 		}
 		else
 			return;
 	}
-    
 
     mx += dx * mSpeed;
     my += dy * mSpeed;
 
-    // The following code could probably be set up way better
+    if (bBlockPlayer == true)
+    {
+        glm::vec3 newPos(mx, my, mz);
+        if (willCollide(prevPos, newPos))
+        {
+            mx = prevPos.x;
+            my = prevPos.y;
+            mz = prevPos.z;
+            //bShape->position = glm::vec3(mx + collisionOffset.x, my + collisionOffset.y, mz + collisionOffset.z);
+            return;
+        }
+
+    }
 
 	if (mModel)
 	{
@@ -170,7 +215,10 @@ void InteractiveObject::move(float dx, float dy, float dz)
         }
 	}
 
-	bShape->position = glm::vec3(mx, my, mz);
+
+    if (bShape)
+        bShape->position = glm::vec3(mx + collisionOffset.x, my + collisionOffset.y, mz + collisionOffset.z);
+
 
 
     //mScene.initQuadTre();
@@ -193,7 +241,6 @@ void InteractiveObject::keyInput(bool key[5], float speed)
 
     if (key[2]) // S
         moveY = -speed;
-
 
     if (key[3]) // D
         moveX = speed;

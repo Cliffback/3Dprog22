@@ -21,7 +21,6 @@ public:
 	virtual void createVertices();
 
 	glm::vec3 position{0.f,0.f,0.f};
-
 };
 
 class AABB : public BoundingShape

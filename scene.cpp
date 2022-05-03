@@ -200,20 +200,25 @@ void Scene::triggerCheck()
 
 void Scene::collisionCheck()
 {
+	bool blockPlayer = false;
     auto posisjon = getPlayer()->getPosition2D();
     auto subtre = mQuadTre.find(posisjon);
     for (auto it = subtre->begin(); it != subtre->end(); it++)
         if ((*it)->bShape && getPlayer()->bShape->overlap((*it)->bShape))
         {
-	/*        if ((*it)->getName() == "bomb")
-	        {
-                getPlayer()->bShape->overlap((*it)->bShape);
-                std::cout << "test";
-	        }
-    */        (*it)->collision(getPlayer());
-	        
-        }
+            (*it)->collision(getPlayer());
 
+            // Oppgave 10
+            if ((*it)->blockPlayer)
+            {
+	            getPlayer()->blockPlayer((*it)->bShape);
+        		blockPlayer = true;
+            }
+        }
+    if (blockPlayer)
+        return;
+    else
+        getPlayer()->bBlockPlayer = false;
 }
 
 void Scene::nextScene()

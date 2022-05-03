@@ -15,6 +15,7 @@
 #include "bomb.h"
 #include "token.h"
 #include "cube.h"
+#include "fence.h"
 
 ExamScene::ExamScene(std::vector<Scene*> scenes, ShaderHandler* handler, RenderWindow& renderWindow, float size) : Scene(scenes, handler, renderWindow, size)
 {
@@ -56,18 +57,26 @@ void ExamScene::createObjects()
 	mObjects.push_back(temp = new InteractiveObject(*this, mShaderHandler->mShaderProgram[2], new OBJ(*this, mShaderHandler->mShaderProgram[2], "../3Dprog22/Assets/character/character_model.obj", "../3Dprog22/Assets/character/character_texture.bmp")));
 	temp->setName("player");
 //	temp->calculateNormals();
+	dynamic_cast<AABB*>(temp->bShape)->extent = glm::vec3{ 1.f, 1.f, 2.1f };
+	temp->collisionOffset = glm::vec3(0.f, 0.f, 2.2f);
 
 	// Oppgave 7 - Enemy
 	mObjects.push_back(temp = new NPC(*this, mShaderHandler->mShaderProgram[0], mRoutes["route1"],.1f, 1.f, true, true));
 	temp->setName("NPC1");
-	temp->move(0.f, 0.f, 10.f);
+	temp->move(0.f, 0.f, 15.f);
 
 	mObjects.push_back(temp = new SkyBox(*this, mShaderHandler->mShaderProgram[3]));
 	temp->setName("skybox");
 	temp->move(5.f, 5.f, 20.f);
 
+	Cube* fenceTemp{ nullptr };
+	fenceTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], -0.3, 0.3, -5.0f, 5.0f, -2.f, 2.f);
 
-	// Tokens the player can pick up
+	mObjects.push_back(temp = new Fence(*this, mShaderHandler->mShaderProgram[0], fenceTemp));
+	temp->setName("fence1");
+	temp->move(5.f, 5.f, 5.f);
+
+	// Oppgave 8 - Tokens
 	Cube* cubeTemp{ nullptr };
 	QVector3D colorTemp{ 1,0,0 };
 	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
@@ -282,7 +291,7 @@ void ExamScene::bombSpawner()
 // Makes sure the bombs are deleted after a while
 void ExamScene::bombDeleter()
 {
-	if (bombDeleteCount > 0)
+	if (bombDeleteCount > 0 && !mBombs.empty())
 		for (int i = 0; i < bombDeleteCount; ++i)
 		{
 			if (mBombs[i]->remove)
@@ -290,6 +299,7 @@ void ExamScene::bombDeleter()
 				delete mBombs[0];
 				mBombs.erase(mBombs.begin());
 				bombNumber--;
+				bombDeleteCount--;
 			}
 		}
 }
@@ -327,8 +337,10 @@ void ExamScene::renderCamera()
 	mCamera->perspective(60, mRenderWindow.width() / mRenderWindow.height(), 0.1, 100.0); // verticalAngle, aspectRatio, nearPlane,farPlane
 
 	QVector3D playerPos{getPlayer()->getXYZ('x'),getPlayer()->getXYZ('y'),getPlayer()->getXYZ('z')};
-	QVector3D camOff{ 0.f,-15.f,6.f }; // The offset of the camera from the player
+	QVector3D camOff{ 0.f,-20.f,10.f }; // The offset of the camera from the player
 	QVector3D camPos{ playerPos.x() + camOff.x(),playerPos.y() + camOff.y(),playerPos.z() + camOff.z() };
+	QVector3D playerOffset{ 0.f, -2.f,0.f };
+	playerPos = QVector3D{ playerPos.x() - playerOffset.x(), playerPos.y() - playerOffset.y() ,playerPos.z() - playerOffset.z() };
 	mCamera->lookAt(camPos,playerPos, mCamera->mUp);
 
 	typedef std::chrono::high_resolution_clock Clock;

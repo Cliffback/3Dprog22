@@ -59,7 +59,7 @@ void Camera::lookAt(const QVector3D &eye, const QVector3D &at, const QVector3D &
 	}
 	else
 	{
-		keyInput(mKey, 0.1f);
+		keyInput(mKey, 0.01f);
         mVmatrix.lookAt(mPosition, mPosition + mForward, mUp);
 	}
     update();

@@ -26,6 +26,8 @@ public:
 	float getXYZ(char xyz) override;
 	void gatherToken();
 	void gotHit();
+	void blockPlayer(BoundingShape* shape);
+	bool willCollide(glm::vec3 prevPos, glm::vec3 futurePos);
 	void keyPressEvent(QKeyEvent* event);
 	void keyReleaseEvent(QKeyEvent* event);
 	int getTokens();
@@ -34,25 +36,28 @@ public:
 	HeightMap* mHeightmap{ nullptr };
 
 	VisualObject* mModel{ nullptr };
-	bool bStopMove{ false };
+	bool bCoolingDown{ false };
 	int hitTimes{ 0 };
 
-   private:
+	bool bBlockPlayer{ false };
+	bool mKey[5]{ false };
+
+private:
 	float mx, my, mz; // posisjon
 	TriangleSurface* mySurface{ nullptr };
 	int myTokens{0};
 	float mSpeed{ 1.f };
-	bool mKey[5]{ false };
 	gsml::QuadTre<std::string, VisualObject*> mQuadTre;
 
 	float rotate{ 0.f };
 
+	QVector3D collisionDirection{ 0.f,0.f,0.f };
 
 	typedef std::chrono::system_clock Clock;
 	Clock::time_point hit;
 	Clock::time_point current;
 	Clock::duration cooldown;
-
+	BoundingShape* blockerShape{ nullptr };
 };
 
 #endif // INTERACTIVEOBJECT_H
