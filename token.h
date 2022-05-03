@@ -12,8 +12,7 @@ public:
     Token(Scene& scene, Shader* shaderProgram);
     Token(Scene& scene, Shader* shaderProgram, VisualObject* object);
     void move(float x, float y, float z) override;
-    void construct(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax);\
-
+    void construct(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax);
     void collision(VisualObject* object) override;
     void activate() override;
 
@@ -33,18 +32,18 @@ private:
 
 };
 
-class PlayerCube : public Token
+class PlayerToken : public Token
 {
 public:
-    PlayerCube(Scene& scene, Shader* shaderProgram, VisualObject* object);
+    PlayerToken(Scene& scene, Shader* shaderProgram, VisualObject* object);
 	void collision(VisualObject* object) override;
 
 };
 
-class NPCCube : public Token
+class NPCToken : public Token
 {
 public:
-    NPCCube(Scene& scene, Shader* shaderProgram, VisualObject* object);
+    NPCToken(Scene& scene, Shader* shaderProgram, VisualObject* object);
     void collision(VisualObject* object) override;
 
 };

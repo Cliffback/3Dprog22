@@ -143,23 +143,23 @@ void Token::hide()
 
 }
 
-PlayerCube::PlayerCube(Scene& scene, Shader* shaderProgram, VisualObject* object) : Token(scene, shaderProgram, object)
+PlayerToken::PlayerToken(Scene& scene, Shader* shaderProgram, VisualObject* object) : Token(scene, shaderProgram, object)
 {
 
 }
 
-void PlayerCube::collision(VisualObject* object)
+void PlayerToken::collision(VisualObject* object)
 {
     Token::collision(object);
 }
 
-NPCToken::NPCCube(Scene& scene, Shader* shaderProgram, VisualObject* object) : Token(scene, shaderProgram, object)
+NPCToken::NPCToken(Scene& scene, Shader* shaderProgram, VisualObject* object) : Token(scene, shaderProgram, object)
 {
 }
 
 void NPCToken::collision(VisualObject* object)
 {
-	//
+//
 }
 
 void Token::move(float x, float y, float z)
