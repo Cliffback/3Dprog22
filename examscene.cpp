@@ -19,7 +19,7 @@ ExamScene::ExamScene(std::vector<Scene*> scenes, ShaderHandler* handler, RenderW
 	//mCamera = new Camera(this);
 	mCamera = new Camera(this, new OBJ(*this, mShaderHandler->mShaderProgram[2], "../3Dprog22/Assets/models/camera_model.obj", "../3Dprog22/Assets/models/camera_texture.bmp"));
 
-	quadDrawHeight = 0.7f;
+	quadDrawHeight = 5.f;
 	createRoutes();
 	createObjects();
 	initQuadTre();
@@ -38,7 +38,7 @@ void ExamScene::createObjects()
 	//temp->setName("avokado");
 
 	// Oppgave 2 - Heightmap
-	mObjects.push_back(temp = new HeightMap(*this, mShaderHandler->mShaderProgram[2], new Texture("../3Dprog22/Assets/heightmap.bmp"),1,0.06f,0.5f,-10.f));
+	mObjects.push_back(temp = new HeightMap(*this, mShaderHandler->mShaderProgram[2], new Texture("../3Dprog22/Assets/heightmap.bmp"),1,0.06f,0.5f,0.f));
 	temp->setName("heightmap");
 	temp->loadTexture(new Texture("../3Dprog22/Assets/grass.bmp"));
 	mapSize = dynamic_cast<HeightMap*>(temp)->getSize() / 2;
@@ -58,7 +58,7 @@ void ExamScene::createObjects()
 	// Oppgave 7 - Enemy
 	mObjects.push_back(temp = new NPC(*this, mShaderHandler->mShaderProgram[0], mRoutes["route1"],.1f, 1.f, true, true));
 	temp->setName("NPC1");
-	temp->move(0.f, 0.f, 5.f);
+	temp->move(0.f, 0.f, 10.f);
 
 	mObjects.push_back(temp = new SkyBox(*this, mShaderHandler->mShaderProgram[3]));
 	temp->setName("skybox");
@@ -94,38 +94,43 @@ void ExamScene::createRoutes()
 
 void ExamScene::bombSpawner()
 {
-	static int bombNumber{ 1 };
 	if (dynamic_cast<NPC*>(mMap["NPC1"])->bSpawn)
 	{
 		Bomb* temp;
 		QVector3D npcPos{ mMap["NPC1"]->getXYZ('x'), mMap["NPC1"]->getXYZ('y'),  mMap["NPC1"]->getXYZ('z') };
 		mBombs.push_back(temp = new Bomb(*this, mShaderHandler->mShaderProgram[0], QVector3D{ npcPos.x(),npcPos.y(),npcPos.z() }));
-		temp->setName("Bomb" + std::to_string(bombNumber));
+		temp->setName("bomb");
+		//temp->setName("bomb" + std::to_string(bombNumber));
 		temp->move(0.f, 0.f, 5.f);
 
 		dynamic_cast<NPC*>(mMap["NPC1"])->bSpawn = false;
 	}
 
-	// Code for removing the bomb
-	int deleteCount{ 0 };
 	if (!mBombs.empty())
 		for (auto it = mBombs.begin(); it != mBombs.end(); it++)
 		{
 			(*it)->draw();
+			// Code for removing the bomb
 			if ((*it)->remove)
-				deleteCount++;
+				bombDeleteCount++;
 		}
 
-	if (deleteCount > 0)
-		for (int i = 0; i < deleteCount; ++i)
+
+
+}
+
+void ExamScene::bombDeleter()
+{
+	if (bombDeleteCount > 0)
+		for (int i = 0; i < bombDeleteCount; ++i)
 		{
 			if (mBombs[i]->remove)
 			{
 				delete mBombs[0];
 				mBombs.erase(mBombs.begin());
+				bombNumber--;
 			}
 		}
-
 }
 
 void ExamScene::init()
@@ -138,6 +143,8 @@ void ExamScene::init()
 
 void ExamScene::renderObjects()
 {
+	bombDeleter();
+
 	mShaderHandler->mShaderProgram[0]->init(mCamera);
 	mShaderHandler->mShaderProgram[1]->init(mCamera);
 	dynamic_cast<PhongShader*>(mShaderHandler->mShaderProgram[2])->init(dynamic_cast<Light*>(mMap["light"]), mCamera);

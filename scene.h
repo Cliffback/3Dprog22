@@ -16,6 +16,8 @@ class InteractiveObject;
 class Camera;
 class ShaderHandler;
 class XYZ;
+class Bomb;
+
 class Scene : public QWindow, protected QOpenGLFunctions_4_1_Core
 {
 public:
@@ -47,6 +49,7 @@ public:
 
     std::unordered_map<std::string, VisualObject*> mMap;
     std::unordered_map<std::string, VisualObject*> mQuads;
+    std::vector<Bomb*> mBombs;
 
 
 	bool isActivated{false};

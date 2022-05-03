@@ -92,6 +92,13 @@ void VisualObject::draw()
 
 }
 
+float VisualObject::getZ()
+{
+    // For kolonne-baserte matriser
+    auto col = mPosition.column(3);
+    return col.z();
+}
+
 void VisualObject::move(float x, float y, float z)
 {
 	if (bShape)

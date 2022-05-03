@@ -13,6 +13,8 @@ InteractiveObject::InteractiveObject(Scene& scene, Shader* shaderProgram) : Visu
 InteractiveObject::InteractiveObject(Scene& scene, Shader* shaderProgram, VisualObject* model) : VisualObject(scene, shaderProgram), mModel(model), mx{ 0.0f }, my{ 0.0f }, mz{ 0.0f }
 {
     bShape = new AABB();
+    std::chrono::duration<int, std::ratio<2> > two_seconds(1);
+    cooldown = two_seconds;
 }
 
 InteractiveObject::InteractiveObject(Scene& scene, Shader* shaderProgram, TriangleSurface* surface) : VisualObject(scene, shaderProgram), mx{0.0f}, my{0.0f}, mz{0.0f}, mySurface{surface}
@@ -88,16 +90,32 @@ void InteractiveObject::draw()
 
 }
 
+void InteractiveObject::gotHit()
+{
+    //if (hitTimes == 3)
+    //    std::cout << "test";
+
+    hitTimes++;
+    bStopMove = true;
+    hit = Clock::now();
+
+}
+
 
 void InteractiveObject::move(float dx, float dy, float dz)
 {
-	if (bStopMove)
+	if (bStopMove  == true)
 	{
+        current = Clock::now();
 		if (current > cooldown + hit)
+		{
             bStopMove = false;
+            return;
+		}
 		else
 			return;
 	}
+    
 
     mx += dx * mSpeed;
     my += dy * mSpeed;
@@ -218,11 +236,7 @@ std::cout << "Token found!" << std::endl;
 std::cout << "Tokens gathered: " << myTokens << std::endl;
 }
 
-void InteractiveObject::gotHit()
-{
-    bStopMove = true;
-    hit = Clock::now();
-}
+
 
 
 void InteractiveObject::keyPressEvent(QKeyEvent* event)

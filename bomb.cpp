@@ -82,6 +82,7 @@ void Bomb::construct()
     mMatrix.setToIdentity();
 
     bShape = new AABB();
+    dynamic_cast<AABB*>(bShape)->extent = glm::vec3 { 1.f };
 }
 
 void Bomb::draw()
@@ -93,8 +94,17 @@ void Bomb::draw()
         remove = true ;
 
 	fall();
-    drawCollision();
-	VisualObject::draw();
+
+    if(!visible)
+    {
+        move(mx, my, -40.f);
+    }
+    else
+    {
+	    
+		drawCollision();
+		VisualObject::draw();
+    }
 }
 
 void Bomb::fall()
@@ -102,9 +112,17 @@ void Bomb::fall()
     float speed{ 0.01f };
     mz -= speed;
 	VisualObject::move(mx,my,mz);
+
+    if (bShape)
+        bShape->position = glm::vec3(mx, my, mz);
 }
 
 void Bomb::collision(VisualObject* player)
 {
+
+
 	dynamic_cast<InteractiveObject*>(player)->gotHit();
+
+    visible = false;
+
 }

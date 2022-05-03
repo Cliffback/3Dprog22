@@ -21,6 +21,7 @@ private:
     Clock::time_point born;
 	Clock::time_point current;
     Clock::duration lifetime;
+    bool visible{ true };
 
 
 

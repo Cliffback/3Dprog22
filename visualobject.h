@@ -23,6 +23,7 @@ public:
    virtual void draw();
 
    virtual float getXYZ(char xyz){ return 0.f;} // Lagt til for å enkelt kunne hente ut posisjon
+   float getZ();
 
    // move for interaktive objekter
    virtual void move(float x, float y, float z);

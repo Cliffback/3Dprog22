@@ -14,6 +14,7 @@
 #include "renderwindow.h"
 #include "camera.h"
 #include "square.h"
+#include "bomb.h"
 
 Scene::Scene(std::vector<Scene*> scenes, ShaderHandler* handler, RenderWindow& renderWindow, float size)
 	: mScenes{ scenes }
@@ -174,6 +175,13 @@ void Scene::initQuadTre()
 	    if ((*it)->bShape)
             mQuadTre.insert((*it)->bShape, (*it)->getName(), *it);
 
+	if (!mBombs.empty())
+	{
+	    for (auto it = mBombs.begin(); it != mBombs.end(); it++)
+	        if ((*it)->bShape)
+	            mQuadTre.insert((*it)->bShape, (*it)->getName(), *it);
+	}
+
     //mQuadTre.print_all();
 
 }
@@ -196,7 +204,15 @@ void Scene::collisionCheck()
     auto subtre = mQuadTre.find(posisjon);
     for (auto it = subtre->begin(); it != subtre->end(); it++)
         if ((*it)->bShape && getPlayer()->bShape->overlap((*it)->bShape))
-            (*it)->collision(getPlayer());
+        {
+	/*        if ((*it)->getName() == "bomb")
+	        {
+                getPlayer()->bShape->overlap((*it)->bShape);
+                std::cout << "test";
+	        }
+    */        (*it)->collision(getPlayer());
+	        
+        }
 
 }
 

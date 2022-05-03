@@ -178,7 +178,15 @@ void QuadTre<ID, T>::print() const
 		<< "QuadTre-sentrum = (" << c.first << ", " << c.second << ") " << std::endl;
     for (auto it = m_objects.begin(); it != m_objects.end(); it++)
     {
-        std::cout << it->first << ": " << it->second->getPosition2D().first << ", " << it->second->getPosition2D().second << ", bShape pos x: " << it->second->bShape->position.x << ", y: " << it->second->bShape->position.y <<  std::endl;
+        std::cout
+    	<< it->first << ": "
+    	<< it->second->getPosition2D().first << ", "
+    	<< it->second->getPosition2D().second << ", z: "
+    	<< it->second->getZ()
+    	<< ", bShape pos x:"
+    	<< it->second->bShape->position.x << ", y: "
+    	<< it->second->bShape->position.y <<  ", z: "
+    	<< it->second->bShape->position.z << std::endl;
     }
 
 }

@@ -1,4 +1,5 @@
 #include "boundingshape.h"
+#include <iostream>
 
 BoundingShape::BoundingShape(Type type) : type(type)
 {
@@ -29,10 +30,11 @@ bool BoundingShape::overlap(AABB* a, AABB* b)
 		aExtent.z + bExtent.z
 	};
 
+
 	return (
 		distance.x < minDistance.x&&
-		distance.y < minDistance.y
-		//&& distance.x < minDistance.z
+		distance.y < minDistance.y&&
+		distance.z < minDistance.z
 		);
 
 }

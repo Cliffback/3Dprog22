@@ -34,6 +34,9 @@ public:
 	HeightMap* mHeightmap{ nullptr };
 
 	VisualObject* mModel{ nullptr };
+	bool bStopMove{ false };
+	int hitTimes{ 0 };
+
    private:
 	float mx, my, mz; // posisjon
 	TriangleSurface* mySurface{ nullptr };
@@ -44,18 +47,11 @@ public:
 
 	float rotate{ 0.f };
 
-	bool bStopMove{ false };
 
 	typedef std::chrono::system_clock Clock;
 	Clock::time_point hit;
 	Clock::time_point current;
 	Clock::duration cooldown;
-
-
-
-
-
-
 
 };
 
