@@ -192,6 +192,7 @@
   <ItemGroup>
     <ClCompile Include="beziercurve.cpp" />
     <ClCompile Include="billboard.cpp" />
+    <ClCompile Include="bomb.cpp" />
     <ClCompile Include="boundingshape.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cube.cpp" />
@@ -234,6 +235,7 @@
   <ItemGroup>
     <ClInclude Include="beziercurve.h" />
     <ClInclude Include="billboard.h" />
+    <ClInclude Include="bomb.h" />
     <ClInclude Include="boundingshape.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="cube.h" />

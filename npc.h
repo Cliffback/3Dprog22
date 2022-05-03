@@ -4,6 +4,7 @@
 #include "visualobject.h"
 #include "route.h"
 #include "trianglesurface.h"
+#include <chrono>
 
 class NPC : public VisualObject
 {
@@ -24,6 +25,8 @@ public:
     void draw() override;
     float getXYZ(char xyz);
 
+    bool bSpawn{ false };
+
 private:
     float mx, my, mz; // posisjon
     float mSpeed;
@@ -33,6 +36,11 @@ private:
     bool showPath{false};
     Route* zeroRoute{ nullptr };
     bool showObject{ false };
+
+    typedef std::chrono::system_clock Clock;
+    Clock::time_point lastSpawn;
+    Clock::time_point current;
+    Clock::duration spawnTime;
 
 };
 

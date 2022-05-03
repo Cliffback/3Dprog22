@@ -91,6 +91,14 @@ void InteractiveObject::draw()
 
 void InteractiveObject::move(float dx, float dy, float dz)
 {
+	if (bStopMove)
+	{
+		if (current > cooldown + hit)
+            bStopMove = false;
+		else
+			return;
+	}
+
     mx += dx * mSpeed;
     my += dy * mSpeed;
 
@@ -208,6 +216,12 @@ void InteractiveObject::gatherToken()
 myTokens++;
 std::cout << "Token found!" << std::endl;
 std::cout << "Tokens gathered: " << myTokens << std::endl;
+}
+
+void InteractiveObject::gotHit()
+{
+    bStopMove = true;
+    hit = Clock::now();
 }
 
 

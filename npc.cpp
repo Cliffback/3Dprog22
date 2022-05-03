@@ -15,6 +15,11 @@ NPC::NPC(Scene& scene, Shader* shaderProgram, Route* route, float speed, float r
     construct(xmin, xmax, ymin, ymax, zmin, zmax);
     mMatrix.setToIdentity();
     bShape = new AABB();
+
+    lastSpawn = Clock::now();
+    std::chrono::duration<int, std::ratio<2> > two_seconds(1);
+    spawnTime = two_seconds;
+
 }
 
 NPC::NPC(Scene& scene, Shader* shaderProgram, TriangleSurface* surface, float speed, float radius, bool visiblePath, bool visibleObject) : VisualObject(scene, shaderProgram), mx{ 0.f }, my{ 0.f }, mz{ 0.f }, mSpeed{ speed }, mySurface{ surface }, showPath(visiblePath), showObject(visibleObject)
@@ -48,58 +53,59 @@ void NPC::construct(float xmin, float xmax, float ymin, float ymax, float zmin, 
 
 
     //front
-    mVertices.push_back(Vertex{ xmin, ymin, zmin,  0,0,0}); // A
-    mVertices.push_back(Vertex{ xmax, ymin, zmin,  1,0,0}); // B
-    mVertices.push_back(Vertex{ xmin, ymax, zmin,  0,0,1}); // C
+    mVertices.push_back(Vertex{ xmin, ymin, zmin,  0,0,0 }); // A
+    mVertices.push_back(Vertex{ xmin, ymax, zmin,  0,0,1 }); // C
+    mVertices.push_back(Vertex{ xmax, ymin, zmin,  1,0,0 }); // B
 
-    mVertices.push_back(Vertex{ xmin, ymax, zmin,  0,0,1}); // C
-    mVertices.push_back(Vertex{ xmax, ymin, zmin,  1,0,0}); // B
-    mVertices.push_back(Vertex{ xmax, ymax, zmin,  1,0,1}); // D
+    mVertices.push_back(Vertex{ xmin, ymax, zmin,  0,0,1 }); // C
+    mVertices.push_back(Vertex{ xmax, ymax, zmin,  1,0,1 }); // D
+    mVertices.push_back(Vertex{ xmax, ymin, zmin,  1,0,0 }); // B
 
     //right
-    mVertices.push_back(Vertex{ xmax, ymin, zmin,  1,0,0}); // B
-    mVertices.push_back(Vertex{ xmax, ymax, zmin,  1,0,1}); // D
-    mVertices.push_back(Vertex{ xmax, ymin, zmax,  0,1,1}); // H
+    mVertices.push_back(Vertex{ xmax, ymin, zmin,  1,0,0 }); // B
+    mVertices.push_back(Vertex{ xmax, ymax, zmin,  1,0,1 }); // D
+    mVertices.push_back(Vertex{ xmax, ymin, zmax,  0,1,1 }); // H
 
-    mVertices.push_back(Vertex{ xmax, ymin, zmax,  0,1,1}); // H
-    mVertices.push_back(Vertex{ xmax, ymax, zmin,  1,0,1}); // D
-    mVertices.push_back(Vertex{ xmax, ymax, zmax,  1,1,1}); // F
-
-    //back
-    mVertices.push_back(Vertex{ xmin, ymin, zmax,  1,1,0}); // G
-    mVertices.push_back(Vertex{ xmax, ymin, zmax,  0,1,1}); //H
-    mVertices.push_back(Vertex{ xmin, ymax, zmax,  0,1,0}); // E
-
-    mVertices.push_back(Vertex{ xmin, ymax, zmax,  0,1,0}); // E
-    mVertices.push_back(Vertex{ xmax, ymin, zmax,  0,1,1}); // H
-    mVertices.push_back(Vertex{ xmax, ymax, zmax,  1,1,1}); // F
+    mVertices.push_back(Vertex{ xmax, ymin, zmax,  0,1,1 }); // H
+    mVertices.push_back(Vertex{ xmax, ymax, zmin,  1,0,1 }); // D
+    mVertices.push_back(Vertex{ xmax, ymax, zmax,  1,1,1 }); // F
 
     //left
-    mVertices.push_back(Vertex{ xmin, ymin, zmin,  0,0,0}); //A
-    mVertices.push_back(Vertex{ xmin, ymax, zmin,  0,0,1}); //C
-    mVertices.push_back(Vertex{ xmin, ymin, zmax,  1,1,0}); //G
+    mVertices.push_back(Vertex{ xmin, ymin, zmin,  0,0,0 }); //A
+    mVertices.push_back(Vertex{ xmin, ymin, zmax,  1,1,0 }); //G
+    mVertices.push_back(Vertex{ xmin, ymax, zmin,  0,0,1 }); //C
 
-    mVertices.push_back(Vertex{ xmin, ymin, zmax,  1,1,0}); //G
-    mVertices.push_back(Vertex{ xmin, ymax, zmin,  0,0,1}); //C
-    mVertices.push_back(Vertex{ xmin, ymax, zmax,  0,1,0}); //E
+    mVertices.push_back(Vertex{ xmin, ymin, zmax,  1,1,0 }); //G
+    mVertices.push_back(Vertex{ xmin, ymax, zmax,  0,1,0 }); //E
+    mVertices.push_back(Vertex{ xmin, ymax, zmin,  0,0,1 }); //C
+
+    //back
+    mVertices.push_back(Vertex{ xmin, ymin, zmax,  1,1,0 }); // G
+    mVertices.push_back(Vertex{ xmax, ymin, zmax,  0,1,1 }); //H
+    mVertices.push_back(Vertex{ xmin, ymax, zmax,  0,1,0 }); // E
+
+    mVertices.push_back(Vertex{ xmin, ymax, zmax,  0,1,0 }); // E
+    mVertices.push_back(Vertex{ xmax, ymin, zmax,  0,1,1 }); // H
+    mVertices.push_back(Vertex{ xmax, ymax, zmax,  1,1,1 }); // F
+
 
     //top
-    mVertices.push_back(Vertex{ xmin, ymax, zmin,  0,0,1}); //C
-    mVertices.push_back(Vertex{ xmax, ymax, zmin,  1,0,1}); //D
-    mVertices.push_back(Vertex{ xmin, ymax, zmax,  0,1,0}); //E
+    mVertices.push_back(Vertex{ xmin, ymax, zmin,  0,0,1 }); //C
+    mVertices.push_back(Vertex{ xmin, ymax, zmax,  0,1,0 }); //E
+    mVertices.push_back(Vertex{ xmax, ymax, zmin,  1,0,1 }); //D
 
-    mVertices.push_back(Vertex{ xmin, ymax, zmax,  0,1,0}); //E
-    mVertices.push_back(Vertex{ xmax, ymax, zmin,  1,0,1}); //D
-    mVertices.push_back(Vertex{ xmax, ymax, zmax,  1,1,1}); //F
+    mVertices.push_back(Vertex{ xmin, ymax, zmax,  0,1,0 }); //E
+    mVertices.push_back(Vertex{ xmax, ymax, zmax,  1,1,1 }); //F
+    mVertices.push_back(Vertex{ xmax, ymax, zmin,  1,0,1 }); //D
 
     //bottom
-    mVertices.push_back(Vertex{ xmin, ymin, zmin,  0,0,0}); // A
-    mVertices.push_back(Vertex{ xmax, ymin, zmin,  1,0,0}); // B
-    mVertices.push_back(Vertex{ xmin, ymin, zmax,  1,1,0}); // G
+    mVertices.push_back(Vertex{ xmin, ymin, zmin,  0,0,0 }); // A
+    mVertices.push_back(Vertex{ xmax, ymin, zmin,  1,0,0 }); // B
+    mVertices.push_back(Vertex{ xmin, ymin, zmax,  1,1,0 }); // G
 
-    mVertices.push_back(Vertex{ xmin, ymin, zmax,  1,1,0}); // G
-    mVertices.push_back(Vertex{ xmax, ymin, zmin,  1,0,0}); // B
-    mVertices.push_back(Vertex{ xmax, ymin, zmax,  0,1,1}); // H
+    mVertices.push_back(Vertex{ xmin, ymin, zmax,  1,1,0 }); // G
+    mVertices.push_back(Vertex{ xmax, ymin, zmin,  1,0,0 }); // B
+    mVertices.push_back(Vertex{ xmax, ymin, zmax,  0,1,1 }); // H
 
 }
 
@@ -185,6 +191,14 @@ void NPC::init()
 
 void NPC::draw()
 {
+    current = Clock::now();
+
+    if (current > spawnTime + lastSpawn)
+    {
+        bSpawn = true;
+        lastSpawn = Clock::now();
+    }
+
     if (mTexture)
     {
         glActiveTexture(mShaderProgram->getShaderSlot());

@@ -25,6 +25,7 @@ public:
 	float mathFunction(float dx, float dy);
 	float getXYZ(char xyz) override;
 	void gatherToken();
+	void gotHit();
 	void keyPressEvent(QKeyEvent* event);
 	void keyReleaseEvent(QKeyEvent* event);
 	int getTokens();
@@ -43,7 +44,12 @@ public:
 
 	float rotate{ 0.f };
 
+	bool bStopMove{ false };
 
+	typedef std::chrono::system_clock Clock;
+	Clock::time_point hit;
+	Clock::time_point current;
+	Clock::duration cooldown;
 
 
 
