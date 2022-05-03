@@ -13,6 +13,7 @@ public:
 	void renderCamera() override;
 	void createObjects() override;
 	void createRoutes();
+	void tokenSpawner();
 	void bombSpawner();
 	void bombDeleter();
 	void billboardSpawner();

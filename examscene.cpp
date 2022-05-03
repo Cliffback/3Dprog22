@@ -77,180 +77,12 @@ void ExamScene::createObjects()
 	temp->setName("fence1");
 	temp->move(5.f, 5.f, 5.f);
 
-	//mObjects.push_back(temp = new Billboard(*this, mShaderHandler->mShaderProgram[1], mCamera, "../3Dprog22/Assets/hund.bmp"));
-	//temp->setName("billboard");
-	//temp->move(0.f, -2.f, 3.f);
-
-	// Oppgave 8 - Tokens
-	Cube* cubeTemp{ nullptr };
-	QVector3D colorTemp{ 1,0,0 };
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new PlayerToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token1");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new PlayerToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token2");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new PlayerToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token3");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new PlayerToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token4");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new PlayerToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token5");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new PlayerToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token6");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new PlayerToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token7");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new PlayerToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token8");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new PlayerToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token9");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new PlayerToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token10");
-
-
-	// NPC tokens
-	colorTemp = QVector3D{0,0,1};
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new NPCToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token11");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new NPCToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token12");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new NPCToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token13");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new NPCToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token14");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new NPCToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token15");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new NPCToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token16");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new NPCToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token17");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new NPCToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token18");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new NPCToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token19");
-
-	cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
-	mObjects.push_back(temp = new NPCToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp));
-	temp->setName("token20");
-
 	for (auto it = mObjects.begin(); it != mObjects.end(); it++)
 		mMap.insert(std::pair<std::string, VisualObject*>((*it)->getName(), *it));
 
 	dynamic_cast<InteractiveObject*>(mMap["player"])->setHeightmap(static_cast<HeightMap*>(mMap["heightmap"]));
 
-
-
-	// Setting the height of the tokens
-	glm::vec3 tempPos{ 0.f,0.f,0.f };
-	float tempHeight{ 0.f };
-	float tempOffset{ 2.f };
-
-
-	srand(time(NULL));
-
-	for (int i = 0; i < 10; ++i)
-	{
-		std::cout <<" rand: " << rand() % 10 + 1 << std::endl;
-
-	}
-	tempPos = glm::vec3{ 17.f,7.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token1"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ 23.f,12.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token2"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ 13.f,-9.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token3"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ 7.f,-25.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token4"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ -17.f,-7.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token5"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ -12.f,-25.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token6"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ -28.f,-3.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token7"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ -14.f,-6.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token8"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ 12.f,16.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token9"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ -2.f,23.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token10"]->move(tempPos.x, tempPos.y, tempHeight);
-
-	tempPos = glm::vec3{ 7.f,12.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token11"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ 21.f,9.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token12"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ 3.f,-15.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token13"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ 20.f,-22.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token14"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ -19.f,-17.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token15"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ -2.f,-15.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token16"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ -18.f,-12.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token17"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ -24.f,-9.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token18"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ 12.f,25.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token19"]->move(tempPos.x, tempPos.y, tempHeight);
-	tempPos = glm::vec3{ -18.f,19.f,0.f };
-	tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
-	mMap["token20"]->move(tempPos.x, tempPos.y, tempHeight);
-
-
-	//billboardSpawner();
+	tokenSpawner();
 }
 
 void ExamScene::createRoutes()
@@ -271,6 +103,73 @@ void ExamScene::createRoutes()
 	route2Points.push_back(Vertex{ 4.f,2.f,0.f, 1,0,0 });
 	route2Points.push_back(Vertex{ 6.f,6.f,0.f, 1,0,0 });
 	mRoutes.insert(std::pair<std::string, Route*>{"route2", new Route{ *this, mShaderHandler->mShaderProgram[0], 0.59999f,-6.13333f,17.73332f, -9.2f, 1.0f, 6.0f }});
+
+}
+
+void ExamScene::tokenSpawner()
+{
+
+	// Oppgave 8 - Tokens
+	srand(time(NULL));
+	Cube* cubeTemp{ nullptr };
+	QVector3D colorTemp;
+
+
+	Token* tempToken;
+	int max = (int)mapSize*2;
+	int min = -(int)mapSize;
+
+	// Setting the height of the tokens
+	glm::vec3 tempPos{ 0.f,0.f,0.f };
+	float tempHeight{ 0.f };
+	float tempOffset{ 2.f };
+
+	colorTemp = QVector3D{ 1,0,0 };
+	for (int i = 0; i < 10; ++i)
+	{
+
+		cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
+
+		tempToken = new PlayerToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp);
+
+		tempToken->setName("playertoken" + std::to_string(i));
+
+		tempPos = glm::vec3{
+			rand() % max + min,
+			rand() % max + min,
+			0.f };
+
+		tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
+
+		tempToken->move(tempPos.x, tempPos.y, tempHeight);
+
+		mTokens.push_back(tempToken);
+	}
+
+	// NPC tokens
+	colorTemp = QVector3D{ 0,0,1 };
+
+	for (int i = 0; i < 10; ++i)
+	{
+		std::cout << " rand: " << rand() % max + min << std::endl;
+
+		cubeTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], 0.5f, colorTemp);
+
+		tempToken = new NPCToken(*this, mShaderHandler->mShaderProgram[0], cubeTemp);
+
+		tempToken->setName("npctoken" + std::to_string(i));
+
+		tempHeight = dynamic_cast<HeightMap*>(mMap["heightmap"])->getHeight(tempPos) + tempOffset;
+
+		tempPos = glm::vec3{
+			rand() % max + min,
+			rand() % max + min,
+			tempHeight };
+		tempToken->move(tempPos.x, tempPos.y, tempHeight);
+
+		mTokens.push_back(tempToken);
+	}
+
 
 }
 
@@ -350,6 +249,9 @@ void ExamScene::init()
 	for (auto it = mMap.begin(); it != mMap.end(); it++)
 		(*it).second->init();
 
+	for (auto it = mTokens.begin(); it != mTokens.end(); it++)
+		(*it)->init();
+
 }
 
 void ExamScene::renderObjects()
@@ -364,6 +266,9 @@ void ExamScene::renderObjects()
 
 	for (auto it = mMap.begin(); it != mMap.end(); it++)
     (*it).second->draw();
+
+	for (auto it = mTokens.begin(); it != mTokens.end(); it++)
+		(*it)->draw();
 
 	if (dynamic_cast<Light*>(mMap["light"])->bMove)
 		dynamic_cast<Light*>(mMap["light"])->rotate(0.1f);

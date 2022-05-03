@@ -182,6 +182,13 @@ void Scene::initQuadTre()
 	            mQuadTre.insert((*it)->bShape, (*it)->getName(), *it);
 	}
 
+	if (!mTokens.empty())
+	{
+        for (auto it = mTokens.begin(); it != mTokens.end(); it++)
+            if ((*it)->bShape)
+                mQuadTre.insert((*it)->bShape, (*it)->getName(), *it);
+	}
+
     //mQuadTre.print_all();
 
 }
