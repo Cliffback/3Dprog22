@@ -78,7 +78,8 @@ void ExamScene::createObjects()
 	temp->setName("fence1");
 	temp->move(5.f, 5.f, 5.f);
 
-	mObjects.push_back(temp = new Enemy(*this, mShaderHandler->mShaderProgram[0]));
+	// Oppgave 9
+	mObjects.push_back(temp = new Enemy(*this, mShaderHandler->mShaderProgram[2], new OBJ(*this, mShaderHandler->mShaderProgram[2], "../3Dprog22/Assets/character/enemy_model.obj", "../3Dprog22/Assets/character/enemy_texture.bmp")));
 	temp->setName("enemy");
 
 	for (auto it = mObjects.begin(); it != mObjects.end(); it++)
@@ -245,7 +246,7 @@ void ExamScene::billboardSpawner()
 
 }
 
-// Oppgave 11
+// Oppgave 11 og 12
 void ExamScene::checkWon()
 {
 	if (!bWonGame && dynamic_cast<InteractiveObject*>(mMap["player"])->myTokens >= 10)

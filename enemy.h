@@ -13,6 +13,7 @@ public:
     void init() override;
     void draw() override;
     void move(float x, float y, float z) override;
+    void gotHit();
 
     void getDestination(std::vector<Token*> tokens);
     void setHeightmap(HeightMap* map);
@@ -23,6 +24,8 @@ public:
     int myTokens{ 0 };
 
     VisualObject* mModel{ nullptr };
+    bool bCoolingDown{ false };
+    int hitTimes{ 0 };
 
 private:
     float mx, my, mz; // posisjon

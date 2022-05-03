@@ -110,7 +110,6 @@ bool InteractiveObject::willCollide(glm::vec3 prevPos, glm::vec3 futurePos)
 void InteractiveObject::move(float dx, float dy, float dz)
 {
     // Oppgave 7 - bomb code
-    glm::vec3 prevPos(mx, my, mz);
 	if (bCoolingDown  == true)
 	{
         current = Clock::now();
@@ -122,6 +121,8 @@ void InteractiveObject::move(float dx, float dy, float dz)
 		else
 			return;
 	}
+
+    glm::vec3 prevPos(mx, my, mz);
 
     mx += dx * mSpeed;
     my += dy * mSpeed;

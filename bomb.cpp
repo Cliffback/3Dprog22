@@ -1,5 +1,6 @@
 #include "bomb.h"
 #include "interactiveobject.h"
+#include "enemy.h"
 
 Bomb::Bomb(Scene& scene, Shader* shaderProgram, QVector3D spawnAt)
 	: VisualObject(scene, shaderProgram), mx(spawnAt.x()),my(spawnAt.y()),mz(spawnAt.z())
@@ -123,7 +124,12 @@ void Bomb::collision(VisualObject* player)
 	{
 	dynamic_cast<InteractiveObject*>(player)->gotHit();
 
-    visible = false;
+	}
+    else if (player->getName() == "enemy")
+	{
+        dynamic_cast<Enemy*>(player)->gotHit();
+        visible = false;
+
 	}
 
 }

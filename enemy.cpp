@@ -27,6 +27,8 @@ Enemy::Enemy(Scene& scene, Shader* shaderProgram) : VisualObject(scene, shaderPr
 
 	mMatrix.setToIdentity();
 	bShape = new AABB();
+	std::chrono::duration<int, std::ratio<2> > two_seconds(1);
+	cooldown = two_seconds;
 	collisionOffset.z = 2.f;
 
 }
@@ -37,6 +39,7 @@ Enemy::Enemy(Scene& scene, Shader* shaderProgram, VisualObject* model) : VisualO
 	std::chrono::duration<int, std::ratio<2> > two_seconds(1);
 	cooldown = two_seconds;
 	collisionOffset.z = 2.f;
+	dynamic_cast<AABB*>(bShape)->extent = glm::vec3(1.f,1.f,4.f);
 }
 
 void Enemy::init()
@@ -60,7 +63,18 @@ void Enemy::draw()
 
 void Enemy::move(float x, float y, float z)
 {
-	std::cout << "enemy pos: " << getPosition2D().first << ", " << getPosition2D().second << std::endl;
+	//Oppgave 9 - Bomb NPC
+	if (bCoolingDown == true)
+	{
+		current = Clock::now();
+		if (current > cooldown + hit)
+		{
+			bCoolingDown = false;
+			return;
+		}
+		else
+			return;
+	}
 
 	mx += x * mSpeed;
 	my += y * mSpeed;
@@ -72,13 +86,23 @@ void Enemy::move(float x, float y, float z)
 		QVector4D pos{ mx,my,mz,1.0f };
 		mPosition.setColumn(3, pos);
 		mMatrix = mPosition;
+		mModel->move(mx, my, mz);
+
+		if (bShape)
+			bShape->position = glm::vec3(mx + collisionOffset.x, my + collisionOffset.y, mz + collisionOffset.z);
 	}
 
-	if (bShape)
-		bShape->position = glm::vec3(mx + collisionOffset.x, my + collisionOffset.y, mz + collisionOffset.z);
 
 }
 
+void Enemy::gotHit()
+{
+	hitTimes++;
+	bCoolingDown = true;
+	hit = Clock::now();
+}
+
+// Oppgave 12
 void Enemy::getDestination(std::vector<Token*> tokens)
 {
 	// Code from here: https://stackoverflow.com/questions/2625021/game-enemy-move-towards-player
@@ -92,6 +116,7 @@ void Enemy::getDestination(std::vector<Token*> tokens)
 
 	// Find token with the shortest distance to it
 	glm::vec2 minPos{100.f,100.f};
+
 	for (auto it = tokens.begin(); it != tokens.end(); it++)
 	{
 		if ((*it)->visible)
