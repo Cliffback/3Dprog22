@@ -10,7 +10,7 @@ Fence::Fence(Scene& scene, Shader* shaderProgram, Cube* cube) : VisualObject(sce
 {
 	blockPlayer = true;
 	bShape = new AABB();
-	dynamic_cast<AABB*>(bShape)->extent = mCube->cubeSize * 1.2f;
+	dynamic_cast<AABB*>(bShape)->extent = mCube->cubeSize;
 }
 
 

@@ -171,10 +171,10 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="fence.cpp">
-      <Filter>Generated Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="enemy.cpp">
-      <Filter>Generated Files</Filter>
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -301,11 +301,11 @@
     <ClInclude Include="bomb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="fence.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="enemy.h">
-      <Filter>Generated Files</Filter>
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fence.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

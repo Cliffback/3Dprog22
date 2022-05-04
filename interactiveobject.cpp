@@ -137,7 +137,6 @@ void InteractiveObject::move(float dx, float dy, float dz)
             mz = prevPos.z;
             return;
         }
-
     }
 
 	if (mModel)

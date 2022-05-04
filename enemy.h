@@ -15,6 +15,9 @@ public:
     void move(float x, float y, float z) override;
     void gotHit();
 
+    void blockPlayer(BoundingShape* shape);
+    bool willCollide(glm::vec3 prevPos, glm::vec3 futurePos);
+
     void getDestination(std::vector<Token*> tokens);
     void setHeightmap(HeightMap* map);
     HeightMap* mHeightmap{ nullptr };
@@ -26,6 +29,7 @@ public:
     VisualObject* mModel{ nullptr };
     bool bCoolingDown{ false };
     int hitTimes{ 0 };
+    bool bBlockPlayer{ false };
 
 private:
     float mx, my, mz; // posisjon
@@ -35,5 +39,11 @@ private:
     Clock::time_point hit;
     Clock::time_point current;
     Clock::duration cooldown;
+
+    BoundingShape* blockerShape{ nullptr };
+
+    std::vector<Token*> mTokens;
+
+    QVector3D mDirection{ 0.f,0.f,0.f };
 };
 

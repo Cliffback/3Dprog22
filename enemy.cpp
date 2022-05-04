@@ -53,12 +53,16 @@ void Enemy::init()
 
 void Enemy::draw()
 {
-	drawCollision();
+	if (bBlockPlayer)
+		getDestination(mTokens);
+
+	move(mDirection.x(), mDirection.y(), mDirection.z());
 
 	if (mModel)
 		mModel->draw();
 	else
 		VisualObject::draw();
+	drawCollision();
 }
 
 void Enemy::move(float x, float y, float z)
@@ -75,6 +79,8 @@ void Enemy::move(float x, float y, float z)
 		else
 			return;
 	}
+
+	glm::vec3 prevPos(mx, my, mz);
 
 	mx += x * mSpeed;
 	my += y * mSpeed;
@@ -102,9 +108,28 @@ void Enemy::gotHit()
 	hit = Clock::now();
 }
 
+void Enemy::blockPlayer(BoundingShape* shape)
+{
+	// check last key used and block movement that direction
+	bBlockPlayer = true;
+	blockerShape = shape;
+}
+
+bool Enemy::willCollide(glm::vec3 prevPos, glm::vec3 futurePos)
+{
+	    BoundingShape* bShapeNew = new AABB();
+    bShapeNew->position = glm::vec3(futurePos.x + collisionOffset.x, futurePos.y + collisionOffset.y, futurePos.z + collisionOffset.z);
+
+    if (bShapeNew->overlap(blockerShape))
+        return true;
+    else
+        return false;
+}
+
 // Oppgave 12
 void Enemy::getDestination(std::vector<Token*> tokens)
 {
+	mTokens = tokens;
 	// Code from here: https://stackoverflow.com/questions/2625021/game-enemy-move-towards-player
 
 	if (myTokens >= tokens.size())
@@ -112,27 +137,45 @@ void Enemy::getDestination(std::vector<Token*> tokens)
 
 	glm::vec2 myPos{ getPosition2D().first,getPosition2D().second };
 	glm::vec2 tokenPos;
-
+	int tokenNumber{ 0 };
 
 	// Find token with the shortest distance to it
 	glm::vec2 minPos{100.f,100.f};
 
-	for (auto it = tokens.begin(); it != tokens.end(); it++)
-	{
-		if ((*it)->visible)
-		{
-			tokenPos = glm::vec2((*it)->getPosition2D().first, (*it)->getPosition2D().second);
 
-			if (glm::length(tokenPos) < glm::length(minPos))
+	for (int i = 0; i < tokens.size(); ++i)
+	{
+		if (tokens[i]->visible)
+		{
+			tokenPos = glm::vec2(tokens[i]->getPosition2D().first, tokens[i]->getPosition2D().second);
+
+			if (glm::length(tokenPos) - glm::length(myPos) < glm::length(minPos) - glm::length(myPos))
+			{
 				minPos = tokenPos;
+				tokenNumber = i;
+			}
 		}
 	}
+
+	if (bBlockPlayer == true)
+	{
+		glm::vec3 blockPos = blockerShape->position;
+		glm::vec3 newDir{ myPos.x - blockPos.x,  myPos.y - blockPos.y, 0.f};
+
+		glm::vec3 blockExt = dynamic_cast<AABB*>(blockerShape)->extent;
+
+		newDir = (blockExt + blockPos) * newDir;
+
+		minPos = glm::vec2(newDir.x, newDir.y);
+
+	}
+
 	tokenPos = minPos;
 
 	glm::vec2 direction{ tokenPos.x - myPos.x, tokenPos.y - myPos.y };
 	glm::vec2 normalizedDirection = glm::normalize(direction);
 
-	move(normalizedDirection.x, normalizedDirection.y, 0.f);
+	mDirection = QVector3D(normalizedDirection.x,normalizedDirection.y,0.f);
 }
 
 void Enemy::setHeightmap(HeightMap* map)
@@ -142,6 +185,7 @@ void Enemy::setHeightmap(HeightMap* map)
 
 void Enemy::gatherToken()
 {
+	getDestination(mTokens);
 	myTokens++;
 	std::cout << "Token found!" << std::endl;
 	std::cout << "Tokens gathered: " << myTokens << std::endl;

@@ -229,11 +229,10 @@ void Scene::collisionCheck()
         		blockPlayer = true;
             }
         }
-    if (blockPlayer)
-        return;
-    else
+    if (!blockPlayer)
         getPlayer()->bBlockPlayer = false;
 
+    bool blockEnemy = false;
 	if (mMap["enemy"])
 	{
         auto posisjon = mMap["enemy"]->getPosition2D();
@@ -243,7 +242,17 @@ void Scene::collisionCheck()
             {
                 (*it)->collision(mMap["enemy"]);
 
+                if ((*it)->blockPlayer)
+                {
+                    dynamic_cast<Enemy*>(mMap["enemy"])->blockPlayer((*it)->bShape);
+                    blockEnemy = true;
+                }
             }
+    }
+    if (!blockEnemy)
+    {
+        dynamic_cast<Enemy*>(mMap["enemy"])->bBlockPlayer = false;
+        dynamic_cast<Enemy*>(mMap["enemy"])->getDestination(mEnemyTokens);
     }
 }
 

@@ -74,15 +74,15 @@ void ExamScene::createObjects()
 
 	Cube* fenceTemp{ nullptr };
 
-	fenceTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], -0.3, 0.3, -5.0f, 5.0f, -2.f, 2.f);
+	fenceTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], -0.3, 0.3, -10, 10.0f, -2.f, 2.f);
 	mObjects.push_back(temp = new Fence(*this, mShaderHandler->mShaderProgram[0], fenceTemp));
 	temp->setName("fence1");
-	temp->move(5.f, 5.f, 5.f);
+	temp->move(12.f, -20.f, 4.f);
 
-	fenceTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], -0.3, 0.3, -5.0f, 5.0f, -2.f, 2.f);
+	fenceTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], -0.3, 0.3, -30.0f, 30.0f, -2.f, 2.f);
 	mObjects.push_back(temp = new Fence(*this, mShaderHandler->mShaderProgram[0], fenceTemp));
 	temp->setName("fence2");
-	temp->move(-12.f, 34.f, 5.f);
+	temp->move(-12.f, 20.f, 5.f);
 
 	// Oppgave 9
 	mObjects.push_back(temp = new Enemy(*this, mShaderHandler->mShaderProgram[2], new OBJ(*this, mShaderHandler->mShaderProgram[2], "../3Dprog22/Assets/character/enemy_model.obj", "../3Dprog22/Assets/character/enemy_texture.bmp")));
@@ -95,7 +95,9 @@ void ExamScene::createObjects()
 	dynamic_cast<Enemy*>(mMap["enemy"])->setHeightmap(dynamic_cast<HeightMap*>(mMap["heightmap"]));
 	mMap["enemy"]->move(5.f, 5.f, 0.f);
 
+
 	tokenSpawner();
+	dynamic_cast<Enemy*>(mMap["enemy"])->getDestination(mEnemyTokens);
 }
 
 void ExamScene::createRoutes()
@@ -286,7 +288,6 @@ void ExamScene::renderObjects()
 {
 	checkWon();
 	bombSpawner();
-	dynamic_cast<Enemy*>(mMap["enemy"])->getDestination(mEnemyTokens);
 
 	mShaderHandler->mShaderProgram[0]->init(mCamera);
 	mShaderHandler->mShaderProgram[1]->init(mCamera);
