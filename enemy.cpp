@@ -39,7 +39,7 @@ Enemy::Enemy(Scene& scene, Shader* shaderProgram, VisualObject* model) : VisualO
 	std::chrono::duration<int, std::ratio<2> > two_seconds(1);
 	cooldown = two_seconds;
 	collisionOffset.z = 2.f;
-	dynamic_cast<AABB*>(bShape)->extent = glm::vec3(1.f,1.f,4.f);
+	dynamic_cast<AABB*>(bShape)->extent = glm::vec3(2.f,1.f,4.f);
 }
 
 void Enemy::init()

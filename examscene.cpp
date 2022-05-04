@@ -65,6 +65,7 @@ void ExamScene::createObjects()
 	// Oppgave 7 - Enemy
 	mObjects.push_back(temp = new NPC(*this, mShaderHandler->mShaderProgram[0], mRoutes["route1"],.1f, 1.f, true, true));
 	temp->setName("NPC1");
+	dynamic_cast<NPC*>(temp)->changeRoute(0.2f, mRoutes["route1"],true, true);
 	temp->move(0.f, 0.f, 15.f);
 
 	mObjects.push_back(temp = new SkyBox(*this, mShaderHandler->mShaderProgram[3]));
@@ -72,11 +73,16 @@ void ExamScene::createObjects()
 	temp->move(5.f, 5.f, 20.f);
 
 	Cube* fenceTemp{ nullptr };
-	fenceTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], -0.3, 0.3, -5.0f, 5.0f, -2.f, 2.f);
 
+	fenceTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], -0.3, 0.3, -5.0f, 5.0f, -2.f, 2.f);
 	mObjects.push_back(temp = new Fence(*this, mShaderHandler->mShaderProgram[0], fenceTemp));
 	temp->setName("fence1");
 	temp->move(5.f, 5.f, 5.f);
+
+	fenceTemp = new Cube(*this, mShaderHandler->mShaderProgram[0], -0.3, 0.3, -5.0f, 5.0f, -2.f, 2.f);
+	mObjects.push_back(temp = new Fence(*this, mShaderHandler->mShaderProgram[0], fenceTemp));
+	temp->setName("fence2");
+	temp->move(-12.f, 34.f, 5.f);
 
 	// Oppgave 9
 	mObjects.push_back(temp = new Enemy(*this, mShaderHandler->mShaderProgram[2], new OBJ(*this, mShaderHandler->mShaderProgram[2], "../3Dprog22/Assets/character/enemy_model.obj", "../3Dprog22/Assets/character/enemy_texture.bmp")));
@@ -102,7 +108,7 @@ void ExamScene::createRoutes()
 	route1Points.push_back(Vertex{ 8.f,2.f,0.f, 0,1,0 });
 	route1Points.push_back(Vertex{ 9.f,5.f,0.f, 0,1,0 });
 	route1Points.push_back(Vertex{ 10.f,4.f,0.f, 0,1,0 });
-	mRoutes.insert(std::pair<std::string, Route*>{"route1", new Route{ *this, mShaderHandler->mShaderProgram[0], route1Points, -0.072f,0.92628f,1.59003f, -20.f, 35.f }});
+	mRoutes.insert(std::pair<std::string, Route*>{"route1", new Route{ *this, mShaderHandler->mShaderProgram[0], route1Points, -0.072f,0.92628f,1.59003f, -30.f, 40.f }});
 
 	std::vector<Vertex> route2Points;
 	route2Points.push_back(Vertex{ 1.f,3.f,0.f, 1,0,0 });

@@ -46,12 +46,12 @@ SkyBox::SkyBox(Scene& scene, Shader* shaderProgram) : VisualObject(scene, shader
 
 	initializeOpenGLFunctions();
 	createCubeMap(
-		"../3Dprog22/Assets/skybox/eddy/front.jpg",
-		"../3Dprog22/Assets/skybox/eddy/back.jpg",
-		"../3Dprog22/Assets/skybox/eddy/top.jpg",
-		"../3Dprog22/Assets/skybox/eddy/bottom.jpg",
-		"../3Dprog22/Assets/skybox/eddy/left.jpg",
-		"../3Dprog22/Assets/skybox/eddy/right.jpg",
+		"../3Dprog22/Assets/skybox/front.jpg",
+		"../3Dprog22/Assets/skybox/back.jpg",
+		"../3Dprog22/Assets/skybox/top.jpg",
+		"../3Dprog22/Assets/skybox/bottom.jpg",
+		"../3Dprog22/Assets/skybox/left.jpg",
+		"../3Dprog22/Assets/skybox/right.jpg",
 		mTextureCube);
 
 }

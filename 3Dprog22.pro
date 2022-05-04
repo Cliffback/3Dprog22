@@ -16,6 +16,7 @@ SOURCES += main.cpp \
     door.cpp \
     door1.cpp \
     door2.cpp \
+    enemy.cpp \
     examscene.cpp \
     fence.cpp \
     heightmap.cpp\
@@ -59,6 +60,7 @@ HEADERS += \
     door.h \
     door1.h \
     door2.h \
+    enemy.h
     examscene.h \
     fence.h \
     heightmap.h\

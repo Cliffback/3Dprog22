@@ -7,7 +7,7 @@
 HeightMap::HeightMap(Scene& scene, Shader* shaderProgram) : VisualObject(scene, shaderProgram)
 {
 
-    loadBitmap(new Texture("../3Dprog22/Assets/hund.bmp"));
+    loadBitmap(new Texture("../3Dprog22/Assets/heightmap.bmp"));
     construct(1, 0.2f, 0.05f,-30.f);
     calcNormals();
     //bShape = new AABB();

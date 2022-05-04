@@ -54,9 +54,9 @@ void Scene3::createObjects()
 
     mapSize = dynamic_cast<HeightMap*>(temp)->getSize()/2;
 
-    mObjects.push_back(temp = new OBJ(*this, mShaderHandler->mShaderProgram[1], "Assets/monkey2.obj", ""));
-    temp->move(0.f, 0.f, 8.f);
-    temp->setName("test");
+    //mObjects.push_back(temp = new OBJ(*this, mShaderHandler->mShaderProgram[1], "Assets/monkey2.obj", ""));
+    //temp->move(0.f, 0.f, 8.f);
+    //temp->setName("test");
 
     mObjects.push_back(temp = new Billboard(*this, mShaderHandler->mShaderProgram[2], mCamera));
     temp->setName("billboard");

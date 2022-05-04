@@ -178,14 +178,14 @@ void RenderWindow::init()
     //********************** Texture stuff: **********************
     //Returns a pointer to the Texture class. This reads and sets up the texture for OpenGL
     //and returns the Texture ID that OpenGL uses from Texture::id()
-    mTexture[0] = new Texture();
-    mTexture[1] = new Texture("../3Dprog22/Assets/hund.bmp");
+    //mTexture[0] = new Texture();
+    //mTexture[1] = new Texture("../3Dprog22/Assets/hund.bmp");
 
-    //Set the textures loaded to a texture unit (also called a texture slot)
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, mTexture[0]->id());
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, mTexture[1]->id());
+    ////Set the textures loaded to a texture unit (also called a texture slot)
+    //glActiveTexture(GL_TEXTURE0);
+    //glBindTexture(GL_TEXTURE_2D, mTexture[0]->id());
+    //glActiveTexture(GL_TEXTURE1);
+    //glBindTexture(GL_TEXTURE_2D, mTexture[1]->id());
 
     //********************** Making the object to be drawn **********************
 

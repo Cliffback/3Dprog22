@@ -110,7 +110,7 @@ void Bomb::draw()
 
 void Bomb::fall()
 {
-    float speed{ 0.01f };
+    float speed{ 0.1f };
     mz -= speed;
 	VisualObject::move(mx,my,mz);
 

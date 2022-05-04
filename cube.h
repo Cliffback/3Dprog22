@@ -11,6 +11,7 @@ public:
     Cube(Scene& scene, Shader* shaderProgram, float radius);
     Cube(Scene& scene, Shader* shaderProgram, float radius, QVector3D color);
     Cube(Scene& scene, Shader* shaderProgram, float xmin, float xmax, float ymin, float ymax, float zmin, float zmax);
+    Cube(Scene& scene, Shader* shaderProgram, float xmin, float xmax, float ymin, float ymax, float zmin, float zmax, QVector3D color);
 
     ~Cube() override;
     void construct(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax);

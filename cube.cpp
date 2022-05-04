@@ -38,6 +38,14 @@ Cube::Cube(Scene& scene, Shader* shaderProgram, float xmin, float xmax, float ym
 
 }
 
+Cube::Cube(Scene& scene, Shader* shaderProgram, float xmin, float xmax, float ymin, float ymax, float zmin, float zmax,
+	QVector3D color) : VisualObject(scene, shaderProgram)
+{
+    construct(xmin, xmax, ymin, ymax, zmin, zmax, color);
+    mMatrix.setToIdentity();
+    bShape = new AABB();
+}
+
 Cube::~Cube() {    }
 
 void Cube::construct(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax)
@@ -104,8 +112,6 @@ void Cube::construct(float xmin, float xmax, float ymin, float ymax, float zmin,
 
 void Cube::construct(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax, QVector3D color)
 {
-
-
     //front
     mVertices.push_back(Vertex{ xmin, ymin, zmin,  color.x(),color.y(),color.z() }); // A
     mVertices.push_back(Vertex{ xmin, ymax, zmin,  color.x(),color.y(),color.z() }); // C
